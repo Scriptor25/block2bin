@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <b2b/project.hpp>
 #include <b2b/zip.hpp>
-#include <nlohmann/json.hpp>
 
 int main()
 {
@@ -16,24 +16,54 @@ int main()
     // --> scratch runtime library!!!
     // --> whole scratch engine
 
+    b2b::ProjectT project;
+    std::map<std::string, std::vector<char>> blobs;
 
     for (const b2b::Zip zip("example.sb3"); const auto entry : zip)
     {
-        auto stat = entry.Stat();
+        const auto stat = entry.Stat();
+        const auto file = entry.Open();
+
+        std::vector<char> blob(stat.size + 1);
+        file.Read(blob.data(), blob.size());
 
         std::cout << stat.name << " (" << stat.size << " B)" << std::endl;
 
         if (std::string_view(stat.name).ends_with(".json"))
         {
-            auto file = entry.Open();
-
-            std::vector<char> buffer(stat.size + 1);
-            file.Read(buffer.data(), buffer.size());
-
-            auto json = nlohmann::json::parse(buffer);
-
-            std::cout << std::setw(4) << json << std::endl;
+            project = nlohmann::json::parse(blob);
+            continue;
         }
+
+        blobs.emplace(stat.name, std::move(blob));
+    }
+
+    (void) project;
+    (void) blobs;
+
+    for (const auto &target : project.Targets)
+    {
+        for (const auto &costume : target->Costumes)
+        {
+            const auto &blob = blobs.at(costume->MD5Ext);
+            (void) blob;
+        }
+
+        for (const auto &sound : target->Sounds)
+        {
+            const auto &blob = blobs.at(sound->MD5Ext);
+            (void) blob;
+        }
+    }
+
+    for (const auto &monitor : project.Monitors)
+    {
+        (void) monitor;
+    }
+
+    for (const auto &extension : project.Extensions)
+    {
+        (void) extension;
     }
 
     return 0;

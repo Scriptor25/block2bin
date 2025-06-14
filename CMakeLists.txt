@@ -19,7 +19,7 @@ option(BUILD_OSSFUZZ "" OFF)
 option(BUILD_EXAMPLES "" OFF)
 option(BUILD_DOC "" OFF)
 
-set(BUILD_SHARED_LIBS OFF)
+option(BUILD_SHARED_LIBS "" OFF)
 
 add_subdirectory(deps/json)
 add_subdirectory(deps/libzip)

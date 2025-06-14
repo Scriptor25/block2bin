@@ -1,103 +1,186 @@
 #pragma once
 
+#define JSON_ASSERT(x)
+
 #include <map>
 #include <string>
 #include <vector>
+#include <b2b/opcode.hpp>
+#include <b2b/opt.hpp>
 #include <nlohmann/json.hpp>
 
 namespace b2b
 {
-    struct MutationT
+    struct ValueT
     {
-        /**
-         * Always equal to "mutation".
-         */
-        std::string TagName;
+        ValueT() = default;
 
-        /**
-         * Seems to always be an empty array.
-         */
-        std::vector<nlohmann::json> Children;
+        ValueT(const ValueT &) = delete;
+        ValueT &operator=(const ValueT &) = delete;
+
+        ValueT(ValueT &&) noexcept = default;
+        ValueT &operator=(ValueT &&) noexcept = default;
+
+        virtual ~ValueT() = default;
     };
 
-    struct ProceduresCallT : MutationT
+    using ValuePtr = std::unique_ptr<ValueT>;
+
+    struct NumberT final : ValueT
+    {
+        double Value;
+    };
+
+    struct StringT final : ValueT
+    {
+        std::string Value;
+    };
+
+    struct ArrayT final : ValueT
+    {
+        std::vector<ValuePtr> Value;
+    };
+
+    struct MutationT
+    {
+        MutationT() = default;
+
+        MutationT(const MutationT &) = delete;
+        MutationT &operator=(const MutationT &) = delete;
+
+        MutationT(MutationT &&) noexcept = default;
+        MutationT &operator=(MutationT &&) noexcept = default;
+
+        virtual ~MutationT() = default;
+
+        std::string TagName;
+        std::vector<ValuePtr> Children;
+    };
+
+    struct ProcedureCallT final : MutationT
     {
         std::string ProcCode;
         std::vector<std::string> ArgumentIds;
         bool Warp;
     };
 
-    struct ProceduresPrototypeT : ProceduresCallT
+    struct ProcedurePrototypeT final : MutationT
     {
+        std::string ProcCode;
+        std::vector<std::string> ArgumentIds;
         std::vector<std::string> ArgumentNames;
+        std::vector<std::string> ArgumentDefaults;
+        bool Warp;
     };
 
-    struct ControlStopT : MutationT
+    struct ControlStopT final : MutationT
     {
-        bool HasNext;
+        bool HasNext{};
     };
 
-    /**
-     * Fields are text boxes, drop-down menus, etc. These are used directly in blocks where there is an input
-     * into which one cannot drop a reporter. However, more often than not, one should be able to do this;
-     * in this case no field exists directly in the block, but an input does, and that input may have a shadow
-     * block in it. A shadow block is a reporter in an input for which one can enter or pick a value, and which
-     * cannot be dragged around but can be replaced by a normal reporter. Scratch internally considers these to
-     * be blocks, although they are not usually thought of as such. (These notions come from Blockly, which
-     * Scratch Blocks is based on.)
-     */
-    struct BlockT
+    using MutationPtr = std::unique_ptr<MutationT>;
+
+    struct BlockRefT
     {
-        /**
-         * A string naming the block. A list of block opcodes can be found here.
-         */
-        std::string Opcode;
+        BlockRefT() = default;
 
-        /**
-         * The ID of the following block or null.
-         */
-        std::optional<std::string> Next;
+        BlockRefT(const BlockRefT &) = delete;
+        BlockRefT &operator=(const BlockRefT &) = delete;
 
-        /**
-         * If the block is a stack block and is preceded, this is the ID of the preceding block. If the
-         * block is the first stack block in a C mouth, this is the ID of the C block. If the block is
-         * an input to another block, this is the ID of that other block. Otherwise, it is null.
-         */
-        std::optional<std::string> Parent;
+        BlockRefT(BlockRefT &&) noexcept = default;
+        BlockRefT &operator=(BlockRefT &&) noexcept = default;
 
-        /**
-         * An object associating names with arrays representing inputs into which other blocks may be dropped,
-         * including C mouths. The first element of each array is 1 if the input is a shadow, 2 if there is no
-         * shadow, and 3 if there is a shadow, but it is obscured by the input. The second is either the ID of
-         * the input or an array representing it as described in the table below. If there is an obscured shadow,
-         * the third element is its ID or an array representing it.
-         */
-        std::map<std::string, nlohmann::json> Inputs;
+        virtual ~BlockRefT() = default;
+    };
 
-        /**
-         * An object associating names with arrays representing fields. The first element of each array is the
-         * field's value. For certain fields, such as variable and broadcast dropdown menus, there is also a
-         * second element, which is the ID of the field's value.
-         */
-        std::map<std::string, nlohmann::json> Fields;
+    struct IdRefT final : BlockRefT
+    {
+        std::string Id;
+    };
 
-        /**
-         * True if this is a shadow block and false otherwise.
-         */
+    struct ArrayRefT : BlockRefT
+    {
+    };
+
+    enum PrimitiveRefE
+    {
+        Number          = 4,
+        PositiveNumber  = 5,
+        PositiveInteger = 6,
+        Integer         = 7,
+        Angle           = 8,
+        Color           = 9,
+        String          = 10,
+    };
+
+    struct PrimitiveRefT final : ArrayRefT
+    {
+        PrimitiveRefE Type;
+        std::string Value;
+    };
+
+    struct BroadcastRefT final : ArrayRefT
+    {
+        std::string Name;
+        std::string Id;
+    };
+
+    struct VariableRefT final : ArrayRefT
+    {
+        bool IsList;
+        std::string Name;
+        std::string Id;
+        Opt<double> X;
+        Opt<double> Y;
+    };
+
+    using BlockRefPtr = std::unique_ptr<BlockRefT>;
+
+    struct InputT
+    {
+        InputT() = default;
+
+        InputT(const InputT &) = delete;
+        InputT &operator=(const InputT &) = delete;
+
+        InputT(InputT &&) noexcept = default;
+        InputT &operator=(InputT &&) noexcept = default;
+
+        virtual ~InputT() = default;
+
+        bool IsShadow{};
+        BlockRefPtr Block;
+    };
+
+    struct ObscuredInputT final : InputT
+    {
+        BlockRefPtr Shadow;
+    };
+
+    using InputPtr = std::unique_ptr<InputT>;
+
+    struct FieldT final
+    {
+        ValuePtr Value;
+        Opt<std::string> Id;
+    };
+
+    struct BlockT final : BlockRefT
+    {
+        OpcodeE Opcode;
+        Opt<std::string> Next;
+        Opt<std::string> Parent;
+        std::map<std::string, InputPtr> Inputs;
+        std::map<std::string, FieldT> Fields;
         bool Shadow;
-
-        /**
-         * False if the block has a parent and true otherwise.
-         */
         bool TopLevel;
-
-        std::optional<double> X;
-        std::optional<double> Y;
-        std::optional<std::string> Comment;
-        std::optional<MutationT> Mutation;
+        Opt<double> X;
+        Opt<double> Y;
+        Opt<std::string> Comment;
+        Opt<MutationPtr> Mutation;
     };
 
-    struct CommentT
+    struct CommentT final
     {
         std::string BlockId;
         double X;
@@ -110,79 +193,100 @@ namespace b2b
 
     struct AssetT
     {
+        AssetT() = default;
+
+        AssetT(const AssetT &) = delete;
+        AssetT &operator=(const AssetT &) = delete;
+
+        AssetT(AssetT &&) noexcept = default;
+        AssetT &operator=(AssetT &&) noexcept = default;
+
+        virtual ~AssetT() = default;
+
         std::string AssetId;
         std::string Name;
         std::string MD5Ext;
         std::string DataFormat;
     };
 
-    struct CostumeT : AssetT
+    struct CostumeT final : AssetT
     {
-        double RotationCenterX;
-        double RotationCenterY;
+        double RotationCenterX{};
+        double RotationCenterY{};
     };
 
-    struct SoundT : AssetT
+    struct SoundT final : AssetT
     {
-        unsigned Rate;
-        unsigned SampleCount;
+        unsigned Rate{};
+        unsigned SampleCount{};
     };
 
-    struct MonitorT
+    using AssetPtr = std::unique_ptr<AssetT>;
+
+    struct MonitorT final
     {
         std::string Id;
         std::string Mode;
         std::map<std::string, std::string> Params;
-        std::string SpriteName;
-        std::string Value;
+        Opt<std::string> SpriteName;
+        ValuePtr Value;
         double Width;
         double Height;
         double X;
         double Y;
         bool Visible;
-        double SliderMin;
-        double SliderMax;
-        bool IsDiscrete;
+        Opt<double> SliderMin;
+        Opt<double> SliderMax;
+        Opt<bool> IsDiscrete;
     };
 
-    struct VariableT
+    struct VariableT final
     {
         std::string Name;
-        std::string Value;
-        bool IsCloud;
+        ValuePtr Value;
+        Opt<bool> IsCloud;
     };
 
-    struct ListT
+    struct ListT final
     {
         std::string Name;
-        std::vector<std::string> Values;
+        std::vector<ValuePtr> Values;
     };
 
     struct TargetT
     {
-        bool IsStage;
+        TargetT() = default;
+
+        TargetT(const TargetT &) = delete;
+        TargetT &operator=(const TargetT &) = delete;
+
+        TargetT(TargetT &&) noexcept = default;
+        TargetT &operator=(TargetT &&) noexcept = default;
+
+        virtual ~TargetT() = default;
+
         std::string Name;
         std::map<std::string, VariableT> Variables;
         std::map<std::string, ListT> Lists;
         std::map<std::string, std::string> Broadcasts;
-        std::map<std::string, BlockT> Blocks;
+        std::map<std::string, BlockRefPtr> Blocks;
         std::map<std::string, CommentT> Comments;
-        unsigned CurrentCostume;
-        std::vector<CostumeT> Costumes;
-        std::vector<SoundT> Sounds;
-        unsigned LayerOrder;
-        double Volume;
+        unsigned CurrentCostume{};
+        std::vector<AssetPtr> Costumes;
+        std::vector<AssetPtr> Sounds;
+        unsigned LayerOrder{};
+        double Volume{};
     };
 
-    struct StageT : TargetT
+    struct StageT final : TargetT
     {
-        double Tempo;
-        std::string VideoState;
-        double VideoTransparency;
-        std::string TextToSpeechLanguage;
+        Opt<double> Tempo;
+        Opt<std::string> VideoState;
+        Opt<double> VideoTransparency;
+        Opt<std::string> TextToSpeechLanguage;
     };
 
-    struct SpriteT : TargetT
+    struct SpriteT final : TargetT
     {
         bool Visible;
         double X;
@@ -193,22 +297,80 @@ namespace b2b
         std::string RotationStyle;
     };
 
-    struct ExtensionT
-    {
-    };
+    using TargetPtr = std::unique_ptr<TargetT>;
 
-    struct MetaT
+    struct MetaT final
     {
         std::string SemVer;
         std::string VM;
         std::string Agent;
     };
 
-    struct ProjectT
+    struct ProjectT final
     {
-        std::vector<TargetT> Targets;
+        std::vector<TargetPtr> Targets;
         std::vector<MonitorT> Monitors;
-        std::vector<ExtensionT> Extensions;
+        std::vector<std::string> Extensions;
         MetaT Meta;
     };
+
+    template<typename T>
+    void from_json(const nlohmann::json &json, Opt<T> &reference)
+    {
+        if (json.is_null() || json.type() >= nlohmann::detail::value_t::discarded)
+        {
+            reference = Opt<T>();
+            return;
+        }
+
+        reference = Opt<T>(json.get<T>());
+    }
+
+    void from_json(const nlohmann::json &json, ProjectT &reference);
+
+    void from_json(const nlohmann::json &json, TargetPtr &reference);
+    void from_json(const nlohmann::json &json, TargetT &reference);
+    void from_json(const nlohmann::json &json, SpriteT &reference);
+    void from_json(const nlohmann::json &json, StageT &reference);
+
+    void from_json(const nlohmann::json &json, MonitorT &reference);
+
+    void from_json(const nlohmann::json &json, MetaT &reference);
+
+    void from_json(const nlohmann::json &json, VariableT &reference);
+
+    void from_json(const nlohmann::json &json, ListT &reference);
+
+    void from_json(const nlohmann::json &json, OpcodeE &reference);
+
+    void from_json(const nlohmann::json &json, CommentT &reference);
+
+    void from_json(const nlohmann::json &json, AssetPtr &reference);
+    void from_json(const nlohmann::json &json, AssetT &reference);
+    void from_json(const nlohmann::json &json, CostumeT &reference);
+    void from_json(const nlohmann::json &json, SoundT &reference);
+
+    void from_json(const nlohmann::json &json, MutationPtr &reference);
+    void from_json(const nlohmann::json &json, MutationT &reference);
+    void from_json(const nlohmann::json &json, ProcedureCallT &reference);
+    void from_json(const nlohmann::json &json, ProcedurePrototypeT &reference);
+    void from_json(const nlohmann::json &json, ControlStopT &reference);
+
+    void from_json(const nlohmann::json &json, InputPtr &reference);
+    void from_json(const nlohmann::json &json, InputT &reference);
+    void from_json(const nlohmann::json &json, ObscuredInputT &reference);
+
+    void from_json(const nlohmann::json &json, BlockRefPtr &reference);
+    void from_json(const nlohmann::json &json, IdRefT &reference);
+    void from_json(const nlohmann::json &json, PrimitiveRefT &reference);
+    void from_json(const nlohmann::json &json, BroadcastRefT &reference);
+    void from_json(const nlohmann::json &json, VariableRefT &reference);
+    void from_json(const nlohmann::json &json, BlockT &reference);
+
+    void from_json(const nlohmann::json &json, FieldT &reference);
+
+    void from_json(const nlohmann::json &json, ValuePtr &reference);
+    void from_json(const nlohmann::json &json, NumberT &reference);
+    void from_json(const nlohmann::json &json, StringT &reference);
+    void from_json(const nlohmann::json &json, ArrayT &reference);
 }
