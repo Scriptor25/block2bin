@@ -5,32 +5,32 @@
 namespace b2b
 {
     template<typename T>
-    class Opt
+    class Option
     {
     public:
-        Opt() = default;
+        Option() = default;
 
-        explicit Opt(T &&value)
+        explicit Option(T &&value)
         {
             m_Value = new T();
             *m_Value = std::move(value);
         }
 
-        Opt(const Opt &other) = delete;
-        Opt &operator=(const Opt &other) = delete;
+        Option(const Option &other) = delete;
+        Option &operator=(const Option &other) = delete;
 
-        Opt(Opt &&other) noexcept
+        Option(Option &&other) noexcept
         {
             std::swap(m_Value, other.m_Value);
         }
 
-        Opt &operator=(Opt &&other) noexcept
+        Option &operator=(Option &&other) noexcept
         {
             std::swap(m_Value, other.m_Value);
             return *this;
         }
 
-        ~Opt()
+        ~Option()
         {
             if (!m_Value)
                 return;
@@ -40,12 +40,16 @@ namespace b2b
 
         T &operator*() const
         {
-            return *m_Value;
+            if (m_Value)
+                return *m_Value;
+            throw std::runtime_error("panic");
         }
 
         T *operator->() const
         {
-            return m_Value;
+            if (m_Value)
+                return m_Value;
+            throw std::runtime_error("panic");
         }
 
         explicit operator bool() const

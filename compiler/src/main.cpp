@@ -54,6 +54,14 @@ int main()
             const auto &blob = blobs.at(sound->MD5Ext);
             (void) blob;
         }
+
+        std::map<std::string, b2b::BlockT *> entry_points;
+        for (const auto &[id, ref] : target->Blocks)
+            if (auto block = dynamic_cast<b2b::BlockT *>(ref.get()); block && b2b::IsEntryPoint(block->Opcode))
+                entry_points.emplace(id, block);
+
+        for (auto [id, block] : entry_points)
+            std::cout << id << " (" << block->Opcode << ")" << std::endl;
     }
 
     for (const auto &monitor : project.Monitors)

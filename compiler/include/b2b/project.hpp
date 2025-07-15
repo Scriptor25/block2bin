@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <b2b/opcode.hpp>
-#include <b2b/opt.hpp>
+#include <b2b/option.hpp>
 #include <nlohmann/json.hpp>
 
 namespace b2b
@@ -130,8 +130,8 @@ namespace b2b
         bool IsList;
         std::string Name;
         std::string Id;
-        Opt<double> X;
-        Opt<double> Y;
+        Option<double> X;
+        Option<double> Y;
     };
 
     using BlockRefPtr = std::unique_ptr<BlockRefT>;
@@ -162,22 +162,22 @@ namespace b2b
     struct FieldT final
     {
         ValuePtr Value;
-        Opt<std::string> Id;
+        Option<std::string> Id;
     };
 
     struct BlockT final : BlockRefT
     {
         OpcodeE Opcode;
-        Opt<std::string> Next;
-        Opt<std::string> Parent;
+        Option<std::string> Next;
+        Option<std::string> Parent;
         std::map<std::string, InputPtr> Inputs;
         std::map<std::string, FieldT> Fields;
         bool Shadow;
         bool TopLevel;
-        Opt<double> X;
-        Opt<double> Y;
-        Opt<std::string> Comment;
-        Opt<MutationPtr> Mutation;
+        Option<double> X;
+        Option<double> Y;
+        Option<std::string> Comment;
+        Option<MutationPtr> Mutation;
     };
 
     struct CommentT final
@@ -228,23 +228,23 @@ namespace b2b
         std::string Id;
         std::string Mode;
         std::map<std::string, std::string> Params;
-        Opt<std::string> SpriteName;
+        Option<std::string> SpriteName;
         ValuePtr Value;
         double Width;
         double Height;
         double X;
         double Y;
         bool Visible;
-        Opt<double> SliderMin;
-        Opt<double> SliderMax;
-        Opt<bool> IsDiscrete;
+        Option<double> SliderMin;
+        Option<double> SliderMax;
+        Option<bool> IsDiscrete;
     };
 
     struct VariableT final
     {
         std::string Name;
         ValuePtr Value;
-        Opt<bool> IsCloud;
+        Option<bool> IsCloud;
     };
 
     struct ListT final
@@ -280,10 +280,10 @@ namespace b2b
 
     struct StageT final : TargetT
     {
-        Opt<double> Tempo;
-        Opt<std::string> VideoState;
-        Opt<double> VideoTransparency;
-        Opt<std::string> TextToSpeechLanguage;
+        Option<double> Tempo;
+        Option<std::string> VideoState;
+        Option<double> VideoTransparency;
+        Option<std::string> TextToSpeechLanguage;
     };
 
     struct SpriteT final : TargetT
@@ -315,15 +315,15 @@ namespace b2b
     };
 
     template<typename T>
-    void from_json(const nlohmann::json &json, Opt<T> &reference)
+    void from_json(const nlohmann::json &json, Option<T> &reference)
     {
         if (json.is_null() || json.type() >= nlohmann::detail::value_t::discarded)
         {
-            reference = Opt<T>();
+            reference = Option<T>();
             return;
         }
 
-        reference = Opt<T>(json.get<T>());
+        reference = Option<T>(json.get<T>());
     }
 
     void from_json(const nlohmann::json &json, ProjectT &reference);

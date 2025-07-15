@@ -354,4 +354,8 @@ namespace b2b
     };
 
     OpcodeE ToOpcode(const std::string &string);
+
+    bool IsEntryPoint(OpcodeE opcode);
+
+    std::ostream &operator<<(std::ostream &stream, OpcodeE opcode);
 }
