@@ -54,10 +54,10 @@ void b2b::from_json(const nlohmann::json &json, SpriteT &reference)
 
 void b2b::from_json(const nlohmann::json &json, StageT &reference)
 {
-    reference.Tempo = json["tempo"];
-    reference.VideoState = json["videoState"];
-    reference.VideoTransparency = json["videoTransparency"];
-    reference.TextToSpeechLanguage = json["textToSpeechLanguage"];
+    reference.Tempo = option_from<double>(json, "tempo");
+    reference.VideoState = option_from<std::string>(json, "videoState");
+    reference.VideoTransparency = option_from<double>(json, "videoTransparency");
+    reference.TextToSpeechLanguage = option_from<std::string>(json, "textToSpeechLanguage");
 }
 
 void b2b::from_json(const nlohmann::json &json, MonitorT &reference)
@@ -65,16 +65,16 @@ void b2b::from_json(const nlohmann::json &json, MonitorT &reference)
     reference.Id = json["id"];
     reference.Mode = json["mode"];
     reference.Params = json["params"];
-    reference.SpriteName = json["spriteName"];
+    reference.SpriteName = option_from<std::string>(json, "spriteName");
     reference.Value = json["value"];
     reference.Width = json["width"];
     reference.Height = json["height"];
     reference.X = json["x"];
     reference.Y = json["y"];
     reference.Visible = json["visible"];
-    reference.SliderMin = json["sliderMin"];
-    reference.SliderMax = json["sliderMax"];
-    reference.IsDiscrete = json["isDiscrete"];
+    reference.SliderMin = option_from<double>(json, "sliderMin");
+    reference.SliderMax = option_from<double>(json, "sliderMax");
+    reference.IsDiscrete = option_from<bool>(json, "isDiscrete");
 }
 
 void b2b::from_json(const nlohmann::json &json, MetaT &reference)
@@ -88,7 +88,7 @@ void b2b::from_json(const nlohmann::json &json, VariableT &reference)
 {
     reference.Name = json[0];
     reference.Value = json[1];
-    reference.IsCloud = json[2];
+    reference.IsCloud = option_from<bool>(json, 2);
 }
 
 void b2b::from_json(const nlohmann::json &json, ListT &reference)
@@ -298,29 +298,29 @@ void b2b::from_json(const nlohmann::json &json, VariableRefT &reference)
     reference.IsList = json[0] == 13;
     reference.Name = json[1];
     reference.Id = json[2];
-    reference.X = json[3];
-    reference.Y = json[4];
+    reference.X = option_from<double>(json, 3);
+    reference.Y = option_from<double>(json, 4);
 }
 
 void b2b::from_json(const nlohmann::json &json, BlockT &reference)
 {
     reference.Opcode = json["opcode"];
-    reference.Next = json["next"];
-    reference.Parent = json["parent"];
+    reference.Next = option_from<std::string>(json, "next");
+    reference.Parent = option_from<std::string>(json, "parent");
     reference.Inputs = json["inputs"];
     reference.Fields = json["fields"];
     reference.Shadow = json["shadow"];
     reference.TopLevel = json["topLevel"];
-    reference.X = json["x"];
-    reference.Y = json["y"];
-    reference.Comment = json["comment"];
-    reference.Mutation = json["mutation"];
+    reference.X = option_from<double>(json, "x");
+    reference.Y = option_from<double>(json, "y");
+    reference.Comment = option_from<std::string>(json, "comment");
+    reference.Mutation = option_from<MutationPtr>(json, "mutation");
 }
 
 void b2b::from_json(const nlohmann::json &json, FieldT &reference)
 {
     reference.Value = json[0];
-    reference.Id = json[1];
+    reference.Id = option_from<std::string>(json, 1);
 }
 
 void b2b::from_json(const nlohmann::json &json, ValuePtr &reference)

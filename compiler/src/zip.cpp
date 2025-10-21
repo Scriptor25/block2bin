@@ -86,7 +86,7 @@ b2b::Zip::Iterator &b2b::Zip::Iterator::operator++()
 
 b2b::Zip::Entry b2b::Zip::Iterator::operator*() const
 {
-    return Entry(m_Archive, m_Index);
+    return { m_Archive, m_Index };
 }
 
 bool b2b::Zip::Iterator::operator!=(const Iterator &entry) const
@@ -96,7 +96,13 @@ bool b2b::Zip::Iterator::operator!=(const Iterator &entry) const
 
 b2b::Zip::Zip(const char *filename)
 {
-    m_Archive = zip_open(filename, ZIP_RDONLY, nullptr);
+    m_Archive = zip_open(filename, ZIP_RDONLY, &m_Error);
+    if (!m_Archive)
+    {
+        std::cerr << "failed to open zip archive '" << filename << "': error code " << m_Error << std::endl;
+        return;
+    }
+
     m_NumEntries = zip_get_num_entries(m_Archive, 0);
 }
 
@@ -107,12 +113,17 @@ b2b::Zip::~Zip()
     m_NumEntries = 0;
 }
 
+b2b::Zip::operator bool() const
+{
+    return m_Archive;
+}
+
 b2b::Zip::Iterator b2b::Zip::begin() const
 {
-    return Iterator(m_Archive, 0);
+    return { m_Archive, 0 };
 }
 
 b2b::Zip::Iterator b2b::Zip::end() const
 {
-    return Iterator(m_Archive, m_NumEntries);
+    return { m_Archive, m_NumEntries };
 }

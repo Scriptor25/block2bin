@@ -1,6 +1,6 @@
 #pragma once
 
-#define JSON_ASSERT(x)
+// #define JSON_ASSERT(x)
 
 #include <map>
 #include <string>
@@ -75,7 +75,7 @@ namespace b2b
 
     struct ControlStopT final : MutationT
     {
-        bool HasNext{};
+        bool HasNext;
     };
 
     using MutationPtr = std::unique_ptr<MutationT>;
@@ -317,7 +317,7 @@ namespace b2b
     template<typename T>
     void from_json(const nlohmann::json &json, Option<T> &reference)
     {
-        if (json.is_null() || json.type() >= nlohmann::detail::value_t::discarded)
+        if (json.is_null() || json.is_binary() || json.is_discarded())
         {
             reference = Option<T>();
             return;

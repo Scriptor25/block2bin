@@ -52,11 +52,14 @@ namespace b2b
         explicit Zip(const char *filename);
         ~Zip();
 
+        explicit operator bool() const;
+
         [[nodiscard]] Iterator begin() const;
         [[nodiscard]] Iterator end() const;
 
     private:
-        zip_t *m_Archive;
-        unsigned m_NumEntries;
+        int m_Error = 0;
+        zip_t *m_Archive = nullptr;
+        unsigned m_NumEntries = 0u;
     };
 }
