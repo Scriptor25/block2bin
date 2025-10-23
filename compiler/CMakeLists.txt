@@ -1,4 +1,4 @@
-find_package(LLVM 18.1 REQUIRED CONFIG)
+find_package(LLVM REQUIRED CONFIG)
 
 execute_process(
         COMMAND ${LLVM_TOOLS_BINARY_DIR}/llvm-config --system-libs --libnames core support passes all-targets

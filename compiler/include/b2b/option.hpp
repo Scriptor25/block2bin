@@ -18,32 +18,34 @@ namespace b2b
         }
 
         Option(const Option &other)
-        {
-            m_P = static_cast<T *>(malloc(sizeof(T)));
-            new(m_P) T(*other.m_P);
-        }
+        = delete;
+        // {
+        //     m_P = static_cast<T *>(malloc(sizeof(T)));
+        //     new(m_P) T(*other.m_P);
+        // }
 
         Option &operator=(const Option &other)
-        {
-            if (this != &other)
-            {
-                if (m_P && other.m_P)
-                {
-                    *m_P = *other.m_P;
-                }
-                else if (m_P)
-                {
-                    free(m_P);
-                    m_P = nullptr;
-                }
-                else
-                {
-                    m_P = static_cast<T *>(malloc(sizeof(T)));
-                    new(m_P) T(*other.m_P);
-                }
-            }
-            return *this;
-        }
+        = delete;
+        // {
+        //     if (this != &other)
+        //     {
+        //         if (m_P && other.m_P)
+        //         {
+        //             *m_P = *other.m_P;
+        //         }
+        //         else if (m_P)
+        //         {
+        //             free(m_P);
+        //             m_P = nullptr;
+        //         }
+        //         else
+        //         {
+        //             m_P = static_cast<T *>(malloc(sizeof(T)));
+        //             new(m_P) T(*other.m_P);
+        //         }
+        //     }
+        //     return *this;
+        // }
 
         Option(Option &&other) noexcept
         {
@@ -112,5 +114,15 @@ namespace b2b
             return json[index];
         }
         return {};
+    }
+
+    template<typename T>
+    std::ostream &operator<<(std::ostream &os, const Option<T> &option)
+    {
+        if (option)
+        {
+            return os << *option;
+        }
+        return os << "<empty>";
     }
 }

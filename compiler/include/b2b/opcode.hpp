@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace b2b
 {
@@ -353,9 +354,20 @@ namespace b2b
         text,
     };
 
+    struct OpcodeRef
+    {
+        OpcodeE Opcode;
+        bool IsEntry;
+        const char *Name;
+        std::vector<const char *> Operands;
+    };
+
     OpcodeE ToOpcode(const std::string &string);
 
-    bool IsEntryPoint(OpcodeE opcode);
+    bool IsEntry(OpcodeE opcode);
+    const char *GetName(OpcodeE opcode);
+    unsigned GetOperandCount(OpcodeE opcode);
+    const char *GetOperandName(OpcodeE opcode, unsigned index);
 
     std::ostream &operator<<(std::ostream &stream, OpcodeE opcode);
 }

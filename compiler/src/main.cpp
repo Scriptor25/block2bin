@@ -5,16 +5,53 @@
 #include <b2b/tree.hpp>
 #include <b2b/zip.hpp>
 
+static void parse_expression_node(
+    std::vector<b2b::ExpressionNodePtr> &nodes,
+    const b2b::ProjectT &project,
+    const b2b::TargetPtr &target,
+    const b2b::BlockRefPtr &block)
+{
+    std::cerr << "TODO: parse expression node " << block << std::endl;
+}
+
 static void parse_statement_node(
     std::vector<b2b::StatementNodePtr> &nodes,
+    const b2b::ProjectT &project,
     const b2b::TargetPtr &target,
     const b2b::BlockT &block)
 {
-    std::cerr << "TODO: parse statement node" << std::endl;
+    if (!block.Inputs.empty())
+    {
+        std::cerr << block.Opcode << ".inputs:" << std::endl;
+        for (auto &[key, value] : block.Inputs)
+        {
+            std::cerr << " " << key << " -> " << value << std::endl;
+        }
+    }
+    if (!block.Fields.empty())
+    {
+        std::cerr << block.Opcode << ".fields:" << std::endl;
+        for (auto &[key, value] : block.Fields)
+        {
+            std::cerr << " " << key << " -> " << value.Id << "," << value.Value << std::endl;
+        }
+    }
+
+    std::vector<b2b::ExpressionNodePtr> operands;
+
+    const auto opcode = block.Opcode;
+    const auto operand_count = b2b::GetOperandCount(opcode);
+    for (unsigned i = 0; i < operand_count; ++i)
+    {
+        const auto operand_name = b2b::GetOperandName(opcode, i);
+        auto &input = block.Inputs.at(operand_name);
+        parse_expression_node(operands, project, target, input->Block);
+    }
 }
 
 static void parse_procedure_node(
     std::vector<b2b::ParentNodePtr> &nodes,
+    const b2b::ProjectT &project,
     const b2b::TargetPtr &target,
     const b2b::BlockT &block)
 {
@@ -39,7 +76,7 @@ static void parse_procedure_node(
 
         if (next)
         {
-            parse_statement_node(node->Statements, target, *next);
+            parse_statement_node(node->Statements, project, target, *next);
         }
     }
 
@@ -48,6 +85,7 @@ static void parse_procedure_node(
 
 static void parse_constructor_node(
     std::vector<b2b::ParentNodePtr> &nodes,
+    const b2b::ProjectT &project,
     const b2b::TargetPtr &target,
     const b2b::BlockT &block)
 {
@@ -60,7 +98,7 @@ static void parse_constructor_node(
 
         if (next)
         {
-            parse_statement_node(node->Statements, target, *next);
+            parse_statement_node(node->Statements, project, target, *next);
         }
     }
 
@@ -69,6 +107,7 @@ static void parse_constructor_node(
 
 static void parse_listener_node(
     std::vector<b2b::ParentNodePtr> &nodes,
+    const b2b::ProjectT &project,
     const b2b::TargetPtr &target,
     const b2b::BlockT &block,
     const std::string_view &event)
@@ -83,7 +122,7 @@ static void parse_listener_node(
 
         if (next)
         {
-            parse_statement_node(node->Statements, target, *next);
+            parse_statement_node(node->Statements, project, target, *next);
         }
     }
 
@@ -92,78 +131,25 @@ static void parse_listener_node(
 
 static void parse_parent_node(
     std::vector<b2b::ParentNodePtr> &nodes,
+    const b2b::ProjectT &project,
     const b2b::TargetPtr &target,
     const b2b::BlockT &block)
 {
-    switch (block.Opcode)
+    const auto opcode = block.Opcode;
+    if (!b2b::IsEntry(opcode))
     {
-    case b2b::event_whenflagclicked:
-        return parse_listener_node(nodes, target, block, "event_whenflagclicked");
-    case b2b::event_whenkeypressed:
-        return parse_listener_node(nodes, target, block, "event_whenkeypressed");
-    case b2b::event_whenthisspriteclicked:
-        return parse_listener_node(nodes, target, block, "event_whenthisspriteclicked");
-    case b2b::event_whenstageclicked:
-        return parse_listener_node(nodes, target, block, "event_whenstageclicked");
-    case b2b::event_whenbackdropswitchesto:
-        return parse_listener_node(nodes, target, block, "event_whenbackdropswitchesto");
-    case b2b::event_whengreaterthan:
-        return parse_listener_node(nodes, target, block, "event_whengreaterthan");
-    case b2b::event_whenbroadcastreceived:
-        return parse_listener_node(nodes, target, block, "event_whenbroadcastreceived");
-    case b2b::event_whentouchingobject:
-        return parse_listener_node(nodes, target, block, "event_whentouchingobject");
+        std::cerr << "invalid parent node block opcode '" << opcode << "'" << std::endl;
+        return;
+    }
 
+    switch (opcode)
+    {
     case b2b::control_start_as_clone:
-        return parse_constructor_node(nodes, target, block);
-
+        return parse_constructor_node(nodes, project, target, block);
     case b2b::procedures_definition:
-        return parse_procedure_node(nodes, target, block);
-
-    case b2b::videoSensing_whenMotionGreaterThan:
-        return parse_listener_node(nodes, target, block, "videoSensing_whenMotionGreaterThan");
-
-    case b2b::makeymakey_whenMakeyKeyPressed:
-        return parse_listener_node(nodes, target, block, "makeymakey_whenMakeyKeyPressed");
-    case b2b::makeymakey_whenCodePressed:
-        return parse_listener_node(nodes, target, block, "makeymakey_whenCodePressed");
-
-    case b2b::microbit_whenButtonPressed:
-        return parse_listener_node(nodes, target, block, "microbit_whenButtonPressed");
-    case b2b::microbit_whenGesture:
-        return parse_listener_node(nodes, target, block, "microbit_whenGesture");
-    case b2b::microbit_whenTilted:
-        return parse_listener_node(nodes, target, block, "microbit_whenTilted");
-    case b2b::microbit_whenPinConnected:
-        return parse_listener_node(nodes, target, block, "microbit_whenPinConnected");
-
-    case b2b::ev3_whenButtonPressed:
-        return parse_listener_node(nodes, target, block, "ev3_whenButtonPressed");
-    case b2b::ev3_whenDistanceLessThan:
-        return parse_listener_node(nodes, target, block, "ev3_whenDistanceLessThan");
-    case b2b::ev3_whenBrightnessLessThan:
-        return parse_listener_node(nodes, target, block, "ev3_whenBrightnessLessThan");
-
-    case b2b::boost_whenColor:
-        return parse_listener_node(nodes, target, block, "boost_whenColor");
-    case b2b::boost_whenTilted:
-        return parse_listener_node(nodes, target, block, "boost_whenTilted");
-
-    case b2b::wedo2_whenDistance:
-        return parse_listener_node(nodes, target, block, "wedo2_whenDistance");
-    case b2b::wedo2_whenTilted:
-        return parse_listener_node(nodes, target, block, "wedo2_whenTilted");
-
-    case b2b::gdxfor_whenGesture:
-        return parse_listener_node(nodes, target, block, "gdxfor_whenGesture");
-    case b2b::gdxfor_whenForcePushedOrPulled:
-        return parse_listener_node(nodes, target, block, "gdxfor_whenForcePushedOrPulled");
-    case b2b::gdxfor_whenTilted:
-        return parse_listener_node(nodes, target, block, "gdxfor_whenTilted");
-
+        return parse_procedure_node(nodes, project, target, block);
     default:
-        std::cerr << "invalid parent node block opcode '" << block.Opcode << "'" << std::endl;
-        break;
+        return parse_listener_node(nodes, project, target, block, b2b::GetName(opcode));
     }
 }
 
@@ -210,43 +196,25 @@ int main()
 
     for (const auto &target : project.Targets)
     {
-        std::cerr << "in target '" << target->Name << "':" << std::endl;
-
-        std::cerr << " - costumes:" << std::endl;
         for (const auto &costume : target->Costumes)
         {
             const auto &blob = blobs.at(costume->MD5Ext);
             (void) blob;
-
-            std::cerr << "    + '" << costume->Name << "' (" << costume->MD5Ext << ")" << std::endl;
         }
 
-        std::cerr << " - sounds:" << std::endl;
         for (const auto &sound : target->Sounds)
         {
             const auto &blob = blobs.at(sound->MD5Ext);
             (void) blob;
-
-            std::cerr << "    + '" << sound->Name << "' (" << sound->MD5Ext << ")" << std::endl;
-        }
-
-        std::map<std::string, b2b::BlockT *> entry_blocks;
-        for (const auto &[id, ref] : target->Blocks)
-        {
-            if (auto block = b2b::cast<b2b::BlockT>(ref); block && b2b::IsEntryPoint(block->Opcode))
-            {
-                entry_blocks.emplace(id, block);
-            }
         }
 
         std::vector<b2b::ParentNodePtr> entry_nodes;
-
-        std::cerr << " - entry points:" << std::endl;
-        for (const auto &[id, block] : entry_blocks)
+        for (const auto &ref : target->Blocks | std::views::values)
         {
-            std::cerr << "    + " << id << " (" << block->Opcode << ")" << std::endl;
-
-            parse_parent_node(entry_nodes, target, *block);
+            if (const auto block = b2b::cast<b2b::BlockT>(ref); block && b2b::IsEntry(block->Opcode))
+            {
+                parse_parent_node(entry_nodes, project, target, *block);
+            }
         }
     }
 
