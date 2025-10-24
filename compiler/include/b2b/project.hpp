@@ -314,6 +314,11 @@ namespace b2b
         MetaT Meta;
     };
 
+    std::ostream &operator<<(std::ostream &os, const ValuePtr &reference);
+    std::ostream &operator<<(std::ostream &os, const NumberT &reference);
+    std::ostream &operator<<(std::ostream &os, const StringT &reference);
+    std::ostream &operator<<(std::ostream &os, const ArrayT &reference);
+
     template<typename T>
     void from_json(const nlohmann::json &json, Option<T> &reference)
     {
@@ -340,8 +345,6 @@ namespace b2b
     void from_json(const nlohmann::json &json, VariableT &reference);
 
     void from_json(const nlohmann::json &json, ListT &reference);
-
-    void from_json(const nlohmann::json &json, OpcodeE &reference);
 
     void from_json(const nlohmann::json &json, CommentT &reference);
 

@@ -1,4 +1,31 @@
+#include <b2b/common.hpp>
 #include <b2b/project.hpp>
+
+std::ostream &b2b::operator<<(std::ostream &os, const ValuePtr &reference)
+{
+    if (const auto p = cast<NumberT>(reference))
+        return os << *p;
+    if (const auto p = cast<StringT>(reference))
+        return os << *p;
+    if (const auto p = cast<ArrayT>(reference))
+        return os << *p;
+    return os << reference.get();
+}
+
+std::ostream &b2b::operator<<(std::ostream &os, const NumberT &reference)
+{
+    return os << reference.Value;
+}
+
+std::ostream &b2b::operator<<(std::ostream &os, const StringT &reference)
+{
+    return os << '"' << reference.Value << '"';
+}
+
+std::ostream &b2b::operator<<(std::ostream &os, const ArrayT &reference)
+{
+    return os << reference.Value;
+}
 
 void b2b::from_json(const nlohmann::json &json, ProjectT &reference)
 {
@@ -95,11 +122,6 @@ void b2b::from_json(const nlohmann::json &json, ListT &reference)
 {
     reference.Name = json[0];
     reference.Values = json[1];
-}
-
-void b2b::from_json(const nlohmann::json &json, OpcodeE &reference)
-{
-    reference = ToOpcode(json);
 }
 
 void b2b::from_json(const nlohmann::json &json, CommentT &reference)
@@ -199,7 +221,14 @@ void b2b::from_json(const nlohmann::json &json, ProcedurePrototypeT &reference)
 
 void b2b::from_json(const nlohmann::json &json, ControlStopT &reference)
 {
-    reference.HasNext = json["hasnext"];
+    if (auto node = json["hasnext"]; node.is_string())
+    {
+        reference.HasNext = node.get<std::string>() == "true";
+    }
+    else
+    {
+        reference.HasNext = node.get<bool>();
+    }
 }
 
 void b2b::from_json(const nlohmann::json &json, InputPtr &reference)

@@ -1,0 +1,2002 @@
+{
+  "undefined": {
+    "entry": false,
+    "name": "undefined",
+    "inputs": [],
+    "fields": []
+  },
+  "coreExample_exampleOpcode": {
+    "entry": false,
+    "name": "coreExample_exampleOpcode",
+    "inputs": [],
+    "fields": []
+  },
+  "coreExample_exampleWithInlineImage": {
+    "entry": false,
+    "name": "coreExample_exampleWithInlineImage",
+    "inputs": [],
+    "fields": []
+  },
+  "motion_movesteps": {
+    "entry": false,
+    "name": "motion_movesteps",
+    "inputs": [
+      "STEPS"
+    ],
+    "fields": []
+  },
+  "motion_turnright": {
+    "entry": false,
+    "name": "motion_turnright",
+    "inputs": [
+      "DEGREES"
+    ],
+    "fields": []
+  },
+  "motion_turnleft": {
+    "entry": false,
+    "name": "motion_turnleft",
+    "inputs": [
+      "DEGREES"
+    ],
+    "fields": []
+  },
+  "motion_goto": {
+    "entry": false,
+    "name": "motion_goto",
+    "inputs": [
+      "TO"
+    ],
+    "fields": []
+  },
+  "motion_gotoxy": {
+    "entry": false,
+    "name": "motion_gotoxy",
+    "inputs": [
+      "X",
+      "Y"
+    ],
+    "fields": []
+  },
+  "motion_glideto": {
+    "entry": false,
+    "name": "motion_glideto",
+    "inputs": [
+      "SECS",
+      "TO"
+    ],
+    "fields": []
+  },
+  "motion_glidesecstoxy": {
+    "entry": false,
+    "name": "motion_glidesecstoxy",
+    "inputs": [
+      "SECS",
+      "X",
+      "Y"
+    ],
+    "fields": []
+  },
+  "motion_pointindirection": {
+    "entry": false,
+    "name": "motion_pointindirection",
+    "inputs": [
+      "DIRECTION"
+    ],
+    "fields": []
+  },
+  "motion_pointtowards": {
+    "entry": false,
+    "name": "motion_pointtowards",
+    "inputs": [
+      "TOWARDS"
+    ],
+    "fields": []
+  },
+  "motion_changexby": {
+    "entry": false,
+    "name": "motion_changexby",
+    "inputs": [
+      "DX"
+    ],
+    "fields": []
+  },
+  "motion_setx": {
+    "entry": false,
+    "name": "motion_setx",
+    "inputs": [
+      "X"
+    ],
+    "fields": []
+  },
+  "motion_changeyby": {
+    "entry": false,
+    "name": "motion_changeyby",
+    "inputs": [
+      "DY"
+    ],
+    "fields": []
+  },
+  "motion_sety": {
+    "entry": false,
+    "name": "motion_sety",
+    "inputs": [
+      "Y"
+    ],
+    "fields": []
+  },
+  "motion_ifonedgebounce": {
+    "entry": false,
+    "name": "motion_ifonedgebounce",
+    "inputs": [],
+    "fields": []
+  },
+  "motion_setrotationstyle": {
+    "entry": false,
+    "name": "motion_setrotationstyle",
+    "inputs": [],
+    "fields": [
+      {
+        "name": "STYLE",
+        "values": [
+          "left-right"
+        ]
+      }
+    ]
+  },
+  "motion_xposition": {
+    "entry": false,
+    "name": "motion_xposition",
+    "inputs": [],
+    "fields": []
+  },
+  "motion_yposition": {
+    "entry": false,
+    "name": "motion_yposition",
+    "inputs": [],
+    "fields": []
+  },
+  "motion_direction": {
+    "entry": false,
+    "name": "motion_direction",
+    "inputs": [],
+    "fields": []
+  },
+  "motion_scroll_right": {
+    "entry": false,
+    "name": "motion_scroll_right",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "motion_scroll_up": {
+    "entry": false,
+    "name": "motion_scroll_up",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "motion_align_scene": {
+    "entry": false,
+    "name": "motion_align_scene",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "motion_xscroll": {
+    "entry": false,
+    "name": "motion_xscroll",
+    "inputs": [],
+    "fields": []
+  },
+  "motion_yscroll": {
+    "entry": false,
+    "name": "motion_yscroll",
+    "inputs": [],
+    "fields": []
+  },
+  "looks_sayforsecs": {
+    "entry": false,
+    "name": "looks_sayforsecs",
+    "inputs": [
+      "MESSAGE",
+      "SECS"
+    ],
+    "fields": []
+  },
+  "looks_say": {
+    "entry": false,
+    "name": "looks_say",
+    "inputs": [
+      "MESSAGE"
+    ],
+    "fields": []
+  },
+  "looks_thinkforsecs": {
+    "entry": false,
+    "name": "looks_thinkforsecs",
+    "inputs": [
+      "MESSAGE",
+      "SECS"
+    ],
+    "fields": []
+  },
+  "looks_think": {
+    "entry": false,
+    "name": "looks_think",
+    "inputs": [
+      "MESSAGE"
+    ],
+    "fields": []
+  },
+  "looks_switchcostumeto": {
+    "entry": false,
+    "name": "looks_switchcostumeto",
+    "inputs": [
+      "COSTUME"
+    ],
+    "fields": []
+  },
+  "looks_nextcostume": {
+    "entry": false,
+    "name": "looks_nextcostume",
+    "inputs": [],
+    "fields": []
+  },
+  "looks_switchbackdropto": {
+    "entry": false,
+    "name": "looks_switchbackdropto",
+    "inputs": [
+      "BACKDROP"
+    ],
+    "fields": []
+  },
+  "looks_switchbackdroptoandwait": {
+    "entry": false,
+    "name": "looks_switchbackdroptoandwait",
+    "inputs": [
+      "BACKDROP"
+    ],
+    "fields": []
+  },
+  "looks_nextbackdrop": {
+    "entry": false,
+    "name": "looks_nextbackdrop",
+    "inputs": [],
+    "fields": []
+  },
+  "looks_changesizeby": {
+    "entry": false,
+    "name": "looks_changesizeby",
+    "inputs": [
+      "CHANGE"
+    ],
+    "fields": []
+  },
+  "looks_setsizeto": {
+    "entry": false,
+    "name": "looks_setsizeto",
+    "inputs": [
+      "SIZE"
+    ],
+    "fields": []
+  },
+  "looks_changeeffectby": {
+    "entry": false,
+    "name": "looks_changeeffectby",
+    "inputs": [
+      "CHANGE"
+    ],
+    "fields": [
+      {
+        "name": "EFFECT",
+        "values": [
+          "COLOR"
+        ]
+      }
+    ]
+  },
+  "looks_seteffectto": {
+    "entry": false,
+    "name": "looks_seteffectto",
+    "inputs": [
+      "VALUE"
+    ],
+    "fields": [
+      {
+        "name": "EFFECT",
+        "values": [
+          "COLOR"
+        ]
+      }
+    ]
+  },
+  "looks_cleargraphiceffects": {
+    "entry": false,
+    "name": "looks_cleargraphiceffects",
+    "inputs": [],
+    "fields": []
+  },
+  "looks_show": {
+    "entry": false,
+    "name": "looks_show",
+    "inputs": [],
+    "fields": []
+  },
+  "looks_hide": {
+    "entry": false,
+    "name": "looks_hide",
+    "inputs": [],
+    "fields": []
+  },
+  "looks_gotofrontback": {
+    "entry": false,
+    "name": "looks_gotofrontback",
+    "inputs": [],
+    "fields": [
+      {
+        "name": "FRONT_BACK",
+        "values": [
+          "front",
+          "back"
+        ]
+      }
+    ]
+  },
+  "looks_goforwardbackwardlayers": {
+    "entry": false,
+    "name": "looks_goforwardbackwardlayers",
+    "inputs": [
+      "NUM"
+    ],
+    "fields": [
+      {
+        "name": "FORWARD_BACKWARD",
+        "values": [
+          "forward",
+          "backward"
+        ]
+      }
+    ]
+  },
+  "looks_costumenumbername": {
+    "entry": false,
+    "name": "looks_costumenumbername",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "looks_backdropnumbername": {
+    "entry": false,
+    "name": "looks_backdropnumbername",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "looks_size": {
+    "entry": false,
+    "name": "looks_size",
+    "inputs": [],
+    "fields": []
+  },
+  "looks_hideallsprites": {
+    "entry": false,
+    "name": "looks_hideallsprites",
+    "inputs": [],
+    "fields": []
+  },
+  "looks_setstretchto": {
+    "entry": false,
+    "name": "looks_setstretchto",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "looks_changestretchby": {
+    "entry": false,
+    "name": "looks_changestretchby",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "sound_playuntildone": {
+    "entry": false,
+    "name": "sound_playuntildone",
+    "inputs": [
+      "SOUND_MENU"
+    ],
+    "fields": []
+  },
+  "sound_play": {
+    "entry": false,
+    "name": "sound_play",
+    "inputs": [
+      "SOUND_MENU"
+    ],
+    "fields": []
+  },
+  "sound_stopallsounds": {
+    "entry": false,
+    "name": "sound_stopallsounds",
+    "inputs": [],
+    "fields": []
+  },
+  "sound_changeeffectby": {
+    "entry": false,
+    "name": "sound_changeeffectby",
+    "inputs": [
+      "VALUE"
+    ],
+    "fields": [
+      {
+        "name": "EFFECT",
+        "values": [
+          "PITCH"
+        ]
+      }
+    ]
+  },
+  "sound_seteffectto": {
+    "entry": false,
+    "name": "sound_seteffectto",
+    "inputs": [
+      "VALUE"
+    ],
+    "fields": [
+      {
+        "name": "EFFECT",
+        "values": [
+          "PITCH"
+        ]
+      }
+    ]
+  },
+  "sound_cleareffects": {
+    "entry": false,
+    "name": "sound_cleareffects",
+    "inputs": [],
+    "fields": []
+  },
+  "sound_changevolumeby": {
+    "entry": false,
+    "name": "sound_changevolumeby",
+    "inputs": [
+      "VOLUME"
+    ],
+    "fields": []
+  },
+  "sound_setvolumeto": {
+    "entry": false,
+    "name": "sound_setvolumeto",
+    "inputs": [
+      "VOLUME"
+    ],
+    "fields": []
+  },
+  "sound_volume": {
+    "entry": false,
+    "name": "sound_volume",
+    "inputs": [],
+    "fields": []
+  },
+  "event_whenflagclicked": {
+    "entry": true,
+    "name": "event_whenflagclicked",
+    "inputs": [],
+    "fields": []
+  },
+  "event_whenkeypressed": {
+    "entry": true,
+    "name": "event_whenkeypressed",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "event_whenthisspriteclicked": {
+    "entry": true,
+    "name": "event_whenthisspriteclicked",
+    "inputs": [],
+    "fields": []
+  },
+  "event_whenstageclicked": {
+    "entry": true,
+    "name": "event_whenstageclicked",
+    "inputs": [],
+    "fields": []
+  },
+  "event_whenbackdropswitchesto": {
+    "entry": true,
+    "name": "event_whenbackdropswitchesto",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "event_whengreaterthan": {
+    "entry": true,
+    "name": "event_whengreaterthan",
+    "inputs": [
+      "TODO",
+      "TODO"
+    ],
+    "fields": []
+  },
+  "event_whenbroadcastreceived": {
+    "entry": true,
+    "name": "event_whenbroadcastreceived",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "event_broadcast": {
+    "entry": false,
+    "name": "event_broadcast",
+    "inputs": [
+      "BROADCAST_INPUT"
+    ],
+    "fields": []
+  },
+  "event_broadcastandwait": {
+    "entry": false,
+    "name": "event_broadcastandwait",
+    "inputs": [
+      "BROADCAST_INPUT"
+    ],
+    "fields": []
+  },
+  "event_whentouchingobject": {
+    "entry": true,
+    "name": "event_whentouchingobject",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "control_wait": {
+    "entry": false,
+    "name": "control_wait",
+    "inputs": [
+      "DURATION"
+    ],
+    "fields": []
+  },
+  "control_repeat": {
+    "entry": false,
+    "name": "control_repeat",
+    "inputs": [
+      "TIMES",
+      "SUBSTACK"
+    ],
+    "fields": []
+  },
+  "control_forever": {
+    "entry": false,
+    "name": "control_forever",
+    "inputs": [
+      "SUBSTACK"
+    ],
+    "fields": []
+  },
+  "control_if": {
+    "entry": false,
+    "name": "control_if",
+    "inputs": [
+      "CONDITION",
+      "SUBSTACK"
+    ],
+    "fields": []
+  },
+  "control_if_else": {
+    "entry": false,
+    "name": "control_if_else",
+    "inputs": [
+      "CONDITION",
+      "SUBSTACK",
+      "SUBSTACK2"
+    ],
+    "fields": []
+  },
+  "control_wait_until": {
+    "entry": false,
+    "name": "control_wait_until",
+    "inputs": [
+      "CONDITION"
+    ],
+    "fields": []
+  },
+  "control_repeat_until": {
+    "entry": false,
+    "name": "control_repeat_until",
+    "inputs": [
+      "CONDITION",
+      "SUBSTACK"
+    ],
+    "fields": []
+  },
+  "control_stop": {
+    "entry": false,
+    "name": "control_stop",
+    "inputs": [],
+    "fields": [
+      {
+        "name": "STOP_OPTION",
+        "values": [
+          "other scripts in sprite"
+        ]
+      }
+    ]
+  },
+  "control_start_as_clone": {
+    "entry": true,
+    "name": "control_start_as_clone",
+    "inputs": [],
+    "fields": []
+  },
+  "control_create_clone_of": {
+    "entry": false,
+    "name": "control_create_clone_of",
+    "inputs": [
+      "CLONE_OPTION"
+    ],
+    "fields": []
+  },
+  "control_delete_this_clone": {
+    "entry": false,
+    "name": "control_delete_this_clone",
+    "inputs": [],
+    "fields": []
+  },
+  "control_for_each": {
+    "entry": false,
+    "name": "control_for_each",
+    "inputs": [
+      "TODO",
+      "TODO",
+      "TODO"
+    ],
+    "fields": []
+  },
+  "control_while": {
+    "entry": false,
+    "name": "control_while",
+    "inputs": [
+      "TODO",
+      "TODO"
+    ],
+    "fields": []
+  },
+  "control_get_counter": {
+    "entry": false,
+    "name": "control_get_counter",
+    "inputs": [],
+    "fields": []
+  },
+  "control_incr_counter": {
+    "entry": false,
+    "name": "control_incr_counter",
+    "inputs": [],
+    "fields": []
+  },
+  "control_clear_counter": {
+    "entry": false,
+    "name": "control_clear_counter",
+    "inputs": [],
+    "fields": []
+  },
+  "control_all_at_once": {
+    "entry": false,
+    "name": "control_all_at_once",
+    "inputs": [
+      "TODO"
+    ],
+    "fields": []
+  },
+  "sensing_touchingobject": {
+    "entry": false,
+    "name": "sensing_touchingobject",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_touchingcolor": {
+    "entry": false,
+    "name": "sensing_touchingcolor",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_coloristouchingcolor": {
+    "entry": false,
+    "name": "sensing_coloristouchingcolor",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_distanceto": {
+    "entry": false,
+    "name": "sensing_distanceto",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_askandwait": {
+    "entry": false,
+    "name": "sensing_askandwait",
+    "inputs": [
+      "QUESTION"
+    ],
+    "fields": []
+  },
+  "sensing_answer": {
+    "entry": false,
+    "name": "sensing_answer",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_keypressed": {
+    "entry": false,
+    "name": "sensing_keypressed",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_mousedown": {
+    "entry": false,
+    "name": "sensing_mousedown",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_mousex": {
+    "entry": false,
+    "name": "sensing_mousex",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_mousey": {
+    "entry": false,
+    "name": "sensing_mousey",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_setdragmode": {
+    "entry": false,
+    "name": "sensing_setdragmode",
+    "inputs": [],
+    "fields": [
+      {
+        "name": "DRAG_MODE",
+        "values": [
+          "draggable"
+        ]
+      }
+    ]
+  },
+  "sensing_loudness": {
+    "entry": false,
+    "name": "sensing_loudness",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_timer": {
+    "entry": false,
+    "name": "sensing_timer",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_resettimer": {
+    "entry": false,
+    "name": "sensing_resettimer",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_of": {
+    "entry": false,
+    "name": "sensing_of",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_current": {
+    "entry": false,
+    "name": "sensing_current",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_dayssince2000": {
+    "entry": false,
+    "name": "sensing_dayssince2000",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_username": {
+    "entry": false,
+    "name": "sensing_username",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_loud": {
+    "entry": false,
+    "name": "sensing_loud",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_userid": {
+    "entry": false,
+    "name": "sensing_userid",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_add": {
+    "entry": false,
+    "name": "operator_add",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_subtract": {
+    "entry": false,
+    "name": "operator_subtract",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_multiply": {
+    "entry": false,
+    "name": "operator_multiply",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_divide": {
+    "entry": false,
+    "name": "operator_divide",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_random": {
+    "entry": false,
+    "name": "operator_random",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_gt": {
+    "entry": false,
+    "name": "operator_gt",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_lt": {
+    "entry": false,
+    "name": "operator_lt",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_equals": {
+    "entry": false,
+    "name": "operator_equals",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_and": {
+    "entry": false,
+    "name": "operator_and",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_or": {
+    "entry": false,
+    "name": "operator_or",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_not": {
+    "entry": false,
+    "name": "operator_not",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_join": {
+    "entry": false,
+    "name": "operator_join",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_letter_of": {
+    "entry": false,
+    "name": "operator_letter_of",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_length": {
+    "entry": false,
+    "name": "operator_length",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_contains": {
+    "entry": false,
+    "name": "operator_contains",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_mod": {
+    "entry": false,
+    "name": "operator_mod",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_round": {
+    "entry": false,
+    "name": "operator_round",
+    "inputs": [],
+    "fields": []
+  },
+  "operator_mathop": {
+    "entry": false,
+    "name": "operator_mathop",
+    "inputs": [],
+    "fields": []
+  },
+  "data_variable": {
+    "entry": false,
+    "name": "data_variable",
+    "inputs": [],
+    "fields": []
+  },
+  "data_setvariableto": {
+    "entry": false,
+    "name": "data_setvariableto",
+    "inputs": [
+      "VALUE"
+    ],
+    "fields": [
+      "VARIABLE"
+    ]
+  },
+  "data_changevariableby": {
+    "entry": false,
+    "name": "data_changevariableby",
+    "inputs": [
+      "VALUE"
+    ],
+    "fields": [
+      "VARIABLE"
+    ]
+  },
+  "data_showvariable": {
+    "entry": false,
+    "name": "data_showvariable",
+    "inputs": [],
+    "fields": [
+      "VARIABLE"
+    ]
+  },
+  "data_hidevariable": {
+    "entry": false,
+    "name": "data_hidevariable",
+    "inputs": [],
+    "fields": [
+      "VARIABLE"
+    ]
+  },
+  "data_listcontents": {
+    "entry": false,
+    "name": "data_listcontents",
+    "inputs": [],
+    "fields": []
+  },
+  "data_addtolist": {
+    "entry": false,
+    "name": "data_addtolist",
+    "inputs": [
+      "ITEM"
+    ],
+    "fields": [
+      "LIST"
+    ]
+  },
+  "data_deleteoflist": {
+    "entry": false,
+    "name": "data_deleteoflist",
+    "inputs": [
+      "INDEX"
+    ],
+    "fields": [
+      "LIST"
+    ]
+  },
+  "data_deletealloflist": {
+    "entry": false,
+    "name": "data_deletealloflist",
+    "inputs": [],
+    "fields": [
+      "LIST"
+    ]
+  },
+  "data_insertatlist": {
+    "entry": false,
+    "name": "data_insertatlist",
+    "inputs": [
+      "INDEX",
+      "ITEM"
+    ],
+    "fields": [
+      "LIST"
+    ]
+  },
+  "data_replaceitemoflist": {
+    "entry": false,
+    "name": "data_replaceitemoflist",
+    "inputs": [
+      "INDEX",
+      "ITEM"
+    ],
+    "fields": [
+      "LIST"
+    ]
+  },
+  "data_itemoflist": {
+    "entry": false,
+    "name": "data_itemoflist",
+    "inputs": [],
+    "fields": []
+  },
+  "data_itemnumoflist": {
+    "entry": false,
+    "name": "data_itemnumoflist",
+    "inputs": [],
+    "fields": []
+  },
+  "data_lengthoflist": {
+    "entry": false,
+    "name": "data_lengthoflist",
+    "inputs": [],
+    "fields": []
+  },
+  "data_listcontainsitem": {
+    "entry": false,
+    "name": "data_listcontainsitem",
+    "inputs": [],
+    "fields": []
+  },
+  "data_showlist": {
+    "entry": false,
+    "name": "data_showlist",
+    "inputs": [],
+    "fields": [
+      "LIST"
+    ]
+  },
+  "data_hidelist": {
+    "entry": false,
+    "name": "data_hidelist",
+    "inputs": [],
+    "fields": [
+      "LIST"
+    ]
+  },
+  "procedures_definition": {
+    "entry": true,
+    "name": "procedures_definition",
+    "inputs": [],
+    "fields": []
+  },
+  "procedures_call": {
+    "entry": false,
+    "name": "procedures_call",
+    "inputs": [],
+    "fields": []
+  },
+  "procedures_declaration": {
+    "entry": false,
+    "name": "procedures_declaration",
+    "inputs": [],
+    "fields": []
+  },
+  "argument_reporter_string_number": {
+    "entry": false,
+    "name": "argument_reporter_string_number",
+    "inputs": [],
+    "fields": []
+  },
+  "argument_reporter_boolean": {
+    "entry": false,
+    "name": "argument_reporter_boolean",
+    "inputs": [],
+    "fields": []
+  },
+  "music_playDrumForBeats": {
+    "entry": false,
+    "name": "music_playDrumForBeats",
+    "inputs": [],
+    "fields": []
+  },
+  "music_restForBeats": {
+    "entry": false,
+    "name": "music_restForBeats",
+    "inputs": [],
+    "fields": []
+  },
+  "music_playNoteForBeats": {
+    "entry": false,
+    "name": "music_playNoteForBeats",
+    "inputs": [],
+    "fields": []
+  },
+  "music_setInstrument": {
+    "entry": false,
+    "name": "music_setInstrument",
+    "inputs": [],
+    "fields": []
+  },
+  "music_setTempo": {
+    "entry": false,
+    "name": "music_setTempo",
+    "inputs": [],
+    "fields": []
+  },
+  "music_changeTempo": {
+    "entry": false,
+    "name": "music_changeTempo",
+    "inputs": [],
+    "fields": []
+  },
+  "music_getTempo": {
+    "entry": false,
+    "name": "music_getTempo",
+    "inputs": [],
+    "fields": []
+  },
+  "music_midiPlayDrumForBeats": {
+    "entry": false,
+    "name": "music_midiPlayDrumForBeats",
+    "inputs": [],
+    "fields": []
+  },
+  "music_midiSetInstrument": {
+    "entry": false,
+    "name": "music_midiSetInstrument",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_clear": {
+    "entry": false,
+    "name": "pen_clear",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_stamp": {
+    "entry": false,
+    "name": "pen_stamp",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_penDown": {
+    "entry": false,
+    "name": "pen_penDown",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_penUp": {
+    "entry": false,
+    "name": "pen_penUp",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_setPenColorToColor": {
+    "entry": false,
+    "name": "pen_setPenColorToColor",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_changePenColorParamBy": {
+    "entry": false,
+    "name": "pen_changePenColorParamBy",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_setPenColorParamTo": {
+    "entry": false,
+    "name": "pen_setPenColorParamTo",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_changePenSizeBy": {
+    "entry": false,
+    "name": "pen_changePenSizeBy",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_setPenSizeTo": {
+    "entry": false,
+    "name": "pen_setPenSizeTo",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_setPenHueToNumber": {
+    "entry": false,
+    "name": "pen_setPenHueToNumber",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_changePenHueBy": {
+    "entry": false,
+    "name": "pen_changePenHueBy",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_setPenShadeToNumber": {
+    "entry": false,
+    "name": "pen_setPenShadeToNumber",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_changePenShadeBy": {
+    "entry": false,
+    "name": "pen_changePenShadeBy",
+    "inputs": [],
+    "fields": []
+  },
+  "videoSensing_whenMotionGreaterThan": {
+    "entry": true,
+    "name": "videoSensing_whenMotionGreaterThan",
+    "inputs": [],
+    "fields": []
+  },
+  "videoSensing_videoOn": {
+    "entry": false,
+    "name": "videoSensing_videoOn",
+    "inputs": [],
+    "fields": []
+  },
+  "videoSensing_videoToggle": {
+    "entry": false,
+    "name": "videoSensing_videoToggle",
+    "inputs": [],
+    "fields": []
+  },
+  "videoSensing_setVideoTransparency": {
+    "entry": false,
+    "name": "videoSensing_setVideoTransparency",
+    "inputs": [],
+    "fields": []
+  },
+  "text2speech_speakAndWait": {
+    "entry": false,
+    "name": "text2speech_speakAndWait",
+    "inputs": [],
+    "fields": []
+  },
+  "text2speech_setVoice": {
+    "entry": false,
+    "name": "text2speech_setVoice",
+    "inputs": [],
+    "fields": []
+  },
+  "text2speech_setLanguage": {
+    "entry": false,
+    "name": "text2speech_setLanguage",
+    "inputs": [],
+    "fields": []
+  },
+  "translate_getTranslate": {
+    "entry": false,
+    "name": "translate_getTranslate",
+    "inputs": [],
+    "fields": []
+  },
+  "translate_getViewerLanguage": {
+    "entry": false,
+    "name": "translate_getViewerLanguage",
+    "inputs": [],
+    "fields": []
+  },
+  "makeymakey_whenMakeyKeyPressed": {
+    "entry": true,
+    "name": "makeymakey_whenMakeyKeyPressed",
+    "inputs": [],
+    "fields": []
+  },
+  "makeymakey_whenCodePressed": {
+    "entry": true,
+    "name": "makeymakey_whenCodePressed",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_whenButtonPressed": {
+    "entry": true,
+    "name": "microbit_whenButtonPressed",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_isButtonPressed": {
+    "entry": false,
+    "name": "microbit_isButtonPressed",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_whenGesture": {
+    "entry": true,
+    "name": "microbit_whenGesture",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_displaySymbol": {
+    "entry": false,
+    "name": "microbit_displaySymbol",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_displayText": {
+    "entry": false,
+    "name": "microbit_displayText",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_displayClear": {
+    "entry": false,
+    "name": "microbit_displayClear",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_whenTilted": {
+    "entry": true,
+    "name": "microbit_whenTilted",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_isTilted": {
+    "entry": false,
+    "name": "microbit_isTilted",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_getTiltAngle": {
+    "entry": false,
+    "name": "microbit_getTiltAngle",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_whenPinConnected": {
+    "entry": true,
+    "name": "microbit_whenPinConnected",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_motorTurnClockwise": {
+    "entry": false,
+    "name": "ev3_motorTurnClockwise",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_motorTurnCounterClockwise": {
+    "entry": false,
+    "name": "ev3_motorTurnCounterClockwise",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_motorSetPower": {
+    "entry": false,
+    "name": "ev3_motorSetPower",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_getMotorPosition": {
+    "entry": false,
+    "name": "ev3_getMotorPosition",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_whenButtonPressed": {
+    "entry": true,
+    "name": "ev3_whenButtonPressed",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_whenDistanceLessThan": {
+    "entry": true,
+    "name": "ev3_whenDistanceLessThan",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_whenBrightnessLessThan": {
+    "entry": true,
+    "name": "ev3_whenBrightnessLessThan",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_buttonPressed": {
+    "entry": false,
+    "name": "ev3_buttonPressed",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_getDistance": {
+    "entry": false,
+    "name": "ev3_getDistance",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_getBrightness": {
+    "entry": false,
+    "name": "ev3_getBrightness",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_beep": {
+    "entry": false,
+    "name": "ev3_beep",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_motorOnFor": {
+    "entry": false,
+    "name": "boost_motorOnFor",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_motorOnForRotation": {
+    "entry": false,
+    "name": "boost_motorOnForRotation",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_motorOn": {
+    "entry": false,
+    "name": "boost_motorOn",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_motorOff": {
+    "entry": false,
+    "name": "boost_motorOff",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_setMotorPower": {
+    "entry": false,
+    "name": "boost_setMotorPower",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_setMotorDirection": {
+    "entry": false,
+    "name": "boost_setMotorDirection",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_getMotorPosition": {
+    "entry": false,
+    "name": "boost_getMotorPosition",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_whenColor": {
+    "entry": true,
+    "name": "boost_whenColor",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_seeingColor": {
+    "entry": false,
+    "name": "boost_seeingColor",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_whenTilted": {
+    "entry": true,
+    "name": "boost_whenTilted",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_getTiltAngle": {
+    "entry": false,
+    "name": "boost_getTiltAngle",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_setLightHue": {
+    "entry": false,
+    "name": "boost_setLightHue",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_motorOnFor": {
+    "entry": false,
+    "name": "wedo2_motorOnFor",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_motorOn": {
+    "entry": false,
+    "name": "wedo2_motorOn",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_motorOff": {
+    "entry": false,
+    "name": "wedo2_motorOff",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_startMotorPower": {
+    "entry": false,
+    "name": "wedo2_startMotorPower",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_setMotorDirection": {
+    "entry": false,
+    "name": "wedo2_setMotorDirection",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_setLightHue": {
+    "entry": false,
+    "name": "wedo2_setLightHue",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_whenDistance": {
+    "entry": true,
+    "name": "wedo2_whenDistance",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_whenTilted": {
+    "entry": true,
+    "name": "wedo2_whenTilted",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_getDistance": {
+    "entry": false,
+    "name": "wedo2_getDistance",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_isTilted": {
+    "entry": false,
+    "name": "wedo2_isTilted",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_getTiltAngle": {
+    "entry": false,
+    "name": "wedo2_getTiltAngle",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_playNoteFor": {
+    "entry": false,
+    "name": "wedo2_playNoteFor",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_whenGesture": {
+    "entry": true,
+    "name": "gdxfor_whenGesture",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_whenForcePushedOrPulled": {
+    "entry": true,
+    "name": "gdxfor_whenForcePushedOrPulled",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_getForce": {
+    "entry": false,
+    "name": "gdxfor_getForce",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_whenTilted": {
+    "entry": true,
+    "name": "gdxfor_whenTilted",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_isTilted": {
+    "entry": false,
+    "name": "gdxfor_isTilted",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_getTilt": {
+    "entry": false,
+    "name": "gdxfor_getTilt",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_isFreeFalling": {
+    "entry": false,
+    "name": "gdxfor_isFreeFalling",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_getSpinSpeed": {
+    "entry": false,
+    "name": "gdxfor_getSpinSpeed",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_getAcceleration": {
+    "entry": false,
+    "name": "gdxfor_getAcceleration",
+    "inputs": [],
+    "fields": []
+  },
+  "motion_goto_menu": {
+    "entry": false,
+    "name": "motion_goto_menu",
+    "inputs": [],
+    "fields": []
+  },
+  "motion_glideto_menu": {
+    "entry": false,
+    "name": "motion_glideto_menu",
+    "inputs": [],
+    "fields": []
+  },
+  "motion_pointtowards_menu": {
+    "entry": false,
+    "name": "motion_pointtowards_menu",
+    "inputs": [],
+    "fields": []
+  },
+  "looks_costume": {
+    "entry": false,
+    "name": "looks_costume",
+    "inputs": [],
+    "fields": []
+  },
+  "looks_backdrops": {
+    "entry": false,
+    "name": "looks_backdrops",
+    "inputs": [],
+    "fields": []
+  },
+  "sound_sounds_menu": {
+    "entry": false,
+    "name": "sound_sounds_menu",
+    "inputs": [],
+    "fields": []
+  },
+  "event_broadcast_menu": {
+    "entry": false,
+    "name": "event_broadcast_menu",
+    "inputs": [],
+    "fields": []
+  },
+  "event_touchingobjectmenu": {
+    "entry": false,
+    "name": "event_touchingobjectmenu",
+    "inputs": [],
+    "fields": []
+  },
+  "control_create_clone_of_menu": {
+    "entry": false,
+    "name": "control_create_clone_of_menu",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_touchingobjectmenu": {
+    "entry": false,
+    "name": "sensing_touchingobjectmenu",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_distancetomenu": {
+    "entry": false,
+    "name": "sensing_distancetomenu",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_keyoptions": {
+    "entry": false,
+    "name": "sensing_keyoptions",
+    "inputs": [],
+    "fields": []
+  },
+  "sensing_of_object_menu": {
+    "entry": false,
+    "name": "sensing_of_object_menu",
+    "inputs": [],
+    "fields": []
+  },
+  "data_listindexall": {
+    "entry": false,
+    "name": "data_listindexall",
+    "inputs": [],
+    "fields": []
+  },
+  "data_listindexrandom": {
+    "entry": false,
+    "name": "data_listindexrandom",
+    "inputs": [],
+    "fields": []
+  },
+  "music_menu_DRUM": {
+    "entry": false,
+    "name": "music_menu_DRUM",
+    "inputs": [],
+    "fields": []
+  },
+  "music_menu_INSTRUMENT": {
+    "entry": false,
+    "name": "music_menu_INSTRUMENT",
+    "inputs": [],
+    "fields": []
+  },
+  "pen_menu_colorParam": {
+    "entry": false,
+    "name": "pen_menu_colorParam",
+    "inputs": [],
+    "fields": []
+  },
+  "videoSensing_menu_ATTRIBUTE": {
+    "entry": false,
+    "name": "videoSensing_menu_ATTRIBUTE",
+    "inputs": [],
+    "fields": []
+  },
+  "videoSensing_menu_SUBJECT": {
+    "entry": false,
+    "name": "videoSensing_menu_SUBJECT",
+    "inputs": [],
+    "fields": []
+  },
+  "videoSensing_menu_VIDEO_STATE": {
+    "entry": false,
+    "name": "videoSensing_menu_VIDEO_STATE",
+    "inputs": [],
+    "fields": []
+  },
+  "text2speech_menu_voices": {
+    "entry": false,
+    "name": "text2speech_menu_voices",
+    "inputs": [],
+    "fields": []
+  },
+  "text2speech_menu_languages": {
+    "entry": false,
+    "name": "text2speech_menu_languages",
+    "inputs": [],
+    "fields": []
+  },
+  "translate_menu_languages": {
+    "entry": false,
+    "name": "translate_menu_languages",
+    "inputs": [],
+    "fields": []
+  },
+  "makeymakey_menu_KEY": {
+    "entry": false,
+    "name": "makeymakey_menu_KEY",
+    "inputs": [],
+    "fields": []
+  },
+  "makeymakey_menu_SEQUENCE": {
+    "entry": false,
+    "name": "makeymakey_menu_SEQUENCE",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_menu_buttons": {
+    "entry": false,
+    "name": "microbit_menu_buttons",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_menu_gestures": {
+    "entry": false,
+    "name": "microbit_menu_gestures",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_menu_tiltDirectionAny": {
+    "entry": false,
+    "name": "microbit_menu_tiltDirectionAny",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_menu_tiltDirection": {
+    "entry": false,
+    "name": "microbit_menu_tiltDirection",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_menu_touchPins": {
+    "entry": false,
+    "name": "microbit_menu_touchPins",
+    "inputs": [],
+    "fields": []
+  },
+  "microbit_menu_pinState": {
+    "entry": false,
+    "name": "microbit_menu_pinState",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_menu_motorPorts": {
+    "entry": false,
+    "name": "ev3_menu_motorPorts",
+    "inputs": [],
+    "fields": []
+  },
+  "ev3_menu_sensorPorts": {
+    "entry": false,
+    "name": "ev3_menu_sensorPorts",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_menu_MOTOR_ID": {
+    "entry": false,
+    "name": "boost_menu_MOTOR_ID",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_menu_MOTOR_DIRECTION": {
+    "entry": false,
+    "name": "boost_menu_MOTOR_DIRECTION",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_menu_MOTOR_REPORTER_ID": {
+    "entry": false,
+    "name": "boost_menu_MOTOR_REPORTER_ID",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_menu_COLOR": {
+    "entry": false,
+    "name": "boost_menu_COLOR",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_menu_TILT_DIRECTION_ANY": {
+    "entry": false,
+    "name": "boost_menu_TILT_DIRECTION_ANY",
+    "inputs": [],
+    "fields": []
+  },
+  "boost_menu_TILT_DIRECTION": {
+    "entry": false,
+    "name": "boost_menu_TILT_DIRECTION",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_menu_MOTOR_ID": {
+    "entry": false,
+    "name": "wedo2_menu_MOTOR_ID",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_menu_MOTOR_DIRECTION": {
+    "entry": false,
+    "name": "wedo2_menu_MOTOR_DIRECTION",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_menu_OP": {
+    "entry": false,
+    "name": "wedo2_menu_OP",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_menu_TILT_DIRECTION_ANY": {
+    "entry": false,
+    "name": "wedo2_menu_TILT_DIRECTION_ANY",
+    "inputs": [],
+    "fields": []
+  },
+  "wedo2_menu_TILT_DIRECTION": {
+    "entry": false,
+    "name": "wedo2_menu_TILT_DIRECTION",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_menu_gestureOptions": {
+    "entry": false,
+    "name": "gdxfor_menu_gestureOptions",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_menu_pushPullOptions": {
+    "entry": false,
+    "name": "gdxfor_menu_pushPullOptions",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_menu_tiltAnyOptions": {
+    "entry": false,
+    "name": "gdxfor_menu_tiltAnyOptions",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_menu_tiltOptions": {
+    "entry": false,
+    "name": "gdxfor_menu_tiltOptions",
+    "inputs": [],
+    "fields": []
+  },
+  "gdxfor_menu_axisOptions": {
+    "entry": false,
+    "name": "gdxfor_menu_axisOptions",
+    "inputs": [],
+    "fields": []
+  },
+  "procedures_prototype": {
+    "entry": false,
+    "name": "procedures_prototype",
+    "inputs": [],
+    "fields": []
+  },
+  "argument_editor_boolean": {
+    "entry": false,
+    "name": "argument_editor_boolean",
+    "inputs": [],
+    "fields": []
+  },
+  "argument_editor_string_number": {
+    "entry": false,
+    "name": "argument_editor_string_number",
+    "inputs": [],
+    "fields": []
+  },
+  "note": {
+    "entry": false,
+    "name": "note",
+    "inputs": [],
+    "fields": []
+  },
+  "matrix": {
+    "entry": false,
+    "name": "matrix",
+    "inputs": [],
+    "fields": []
+  },
+  "math_number": {
+    "entry": false,
+    "name": "math_number",
+    "inputs": [],
+    "fields": []
+  },
+  "math_positive_number": {
+    "entry": false,
+    "name": "math_positive_number",
+    "inputs": [],
+    "fields": []
+  },
+  "math_whole_number": {
+    "entry": false,
+    "name": "math_whole_number",
+    "inputs": [],
+    "fields": []
+  },
+  "math_integer": {
+    "entry": false,
+    "name": "math_integer",
+    "inputs": [],
+    "fields": []
+  },
+  "math_angle": {
+    "entry": false,
+    "name": "math_angle",
+    "inputs": [],
+    "fields": []
+  },
+  "colour_picker": {
+    "entry": false,
+    "name": "colour_picker",
+    "inputs": [],
+    "fields": []
+  },
+  "text": {
+    "entry": false,
+    "name": "text",
+    "inputs": [],
+    "fields": []
+  }
+}

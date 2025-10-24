@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 #include <vector>
 #include <b2b/common.hpp>
@@ -20,32 +21,44 @@ static void parse_statement_node(
     const b2b::TargetPtr &target,
     const b2b::BlockT &block)
 {
-    if (!block.Inputs.empty())
-    {
-        std::cerr << block.Opcode << ".inputs:" << std::endl;
-        for (auto &[key, value] : block.Inputs)
-        {
-            std::cerr << " " << key << " -> " << value << std::endl;
-        }
-    }
-    if (!block.Fields.empty())
-    {
-        std::cerr << block.Opcode << ".fields:" << std::endl;
-        for (auto &[key, value] : block.Fields)
-        {
-            std::cerr << " " << key << " -> " << value.Id << "," << value.Value << std::endl;
-        }
-    }
+    // if (!block.Inputs.empty())
+    // {
+    //     std::cerr << block.Opcode << ".inputs:" << std::endl;
+    //     for (auto &[key, value] : block.Inputs)
+    //     {
+    //         std::cerr << " " << key << " -> " << value << std::endl;
+    //     }
+    // }
+    // if (!block.Fields.empty())
+    // {
+    //     std::cerr << block.Opcode << ".fields:" << std::endl;
+    //     for (auto &[key, value] : block.Fields)
+    //     {
+    //         std::cerr << " " << key << " -> " << value.Id << "," << value.Value << std::endl;
+    //     }
+    // }
 
-    std::vector<b2b::ExpressionNodePtr> operands;
+    std::vector<b2b::ExpressionNodePtr> inputs;
+    std::vector<b2b::ExpressionNodePtr> fields;
 
     const auto opcode = block.Opcode;
-    const auto operand_count = b2b::GetOperandCount(opcode);
-    for (unsigned i = 0; i < operand_count; ++i)
+
+    const auto input_count = b2b::GetInputCount(opcode);
+    for (unsigned i = 0; i < input_count; ++i)
     {
-        const auto operand_name = b2b::GetOperandName(opcode, i);
-        auto &input = block.Inputs.at(operand_name);
-        parse_expression_node(operands, project, target, input->Block);
+        const auto input_name = b2b::GetInputName(opcode, i);
+        auto &input = block.Inputs.at(input_name);
+        parse_expression_node(inputs, project, target, input->Block);
+    }
+
+    const auto field_count = b2b::GetFieldCount(opcode);
+    for (unsigned i = 0; i < field_count; ++i)
+    {
+        const auto field_name = b2b::GetFieldName(opcode, i);
+        auto &field = block.Fields.at(field_name);
+        // id -> pointer to block, list, variable, etc.
+        // value -> raw value, only if no id
+        std::cerr << "field " << field_name << ": id=\"" << field.Id << "\" value=" << field.Value << std::endl;
     }
 }
 
@@ -171,6 +184,14 @@ int main()
     {
         return 1;
     }
+
+    std::ifstream blocks("blocks.json");
+    if (!blocks)
+    {
+        return 1;
+    }
+
+    b2b::ReadDictionary(blocks);
 
     b2b::ProjectT project;
     std::map<std::string, std::vector<char>> blobs;

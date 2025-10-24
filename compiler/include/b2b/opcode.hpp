@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <nlohmann/json.hpp>
 
 namespace b2b
 {
@@ -354,20 +355,38 @@ namespace b2b
         text,
     };
 
-    struct OpcodeRef
+    struct OpcodeFieldT
     {
-        OpcodeE Opcode;
+        bool IsEnum;
+        std::string Name;
+        std::vector<std::string> Values;
+    };
+
+    struct OpcodeT
+    {
         bool IsEntry;
-        const char *Name;
-        std::vector<const char *> Operands;
+        std::string Name;
+        std::vector<std::string> Inputs;
+        std::vector<OpcodeFieldT> Fields;
     };
 
     OpcodeE ToOpcode(const std::string &string);
 
+    void ReadDictionary(std::istream &stream);
+
     bool IsEntry(OpcodeE opcode);
-    const char *GetName(OpcodeE opcode);
-    unsigned GetOperandCount(OpcodeE opcode);
-    const char *GetOperandName(OpcodeE opcode, unsigned index);
+
+    std::string GetName(OpcodeE opcode);
+
+    unsigned GetInputCount(OpcodeE opcode);
+    std::string GetInputName(OpcodeE opcode, unsigned index);
+
+    unsigned GetFieldCount(OpcodeE opcode);
+    std::string GetFieldName(OpcodeE opcode, unsigned index);
 
     std::ostream &operator<<(std::ostream &stream, OpcodeE opcode);
+
+    void from_json(const nlohmann::json &json, OpcodeE &reference);
+    void from_json(const nlohmann::json &json, OpcodeT &reference);
+    void from_json(const nlohmann::json &json, OpcodeFieldT &reference);
 }

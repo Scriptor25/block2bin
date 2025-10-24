@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 namespace b2b
 {
@@ -20,5 +21,18 @@ namespace b2b
         }
         delete s;
         return std::unique_ptr<D>();
+    }
+
+    template<typename T>
+    std::ostream &operator<<(std::ostream &os, const std::vector<T> &reference)
+    {
+        os << '[';
+        for (unsigned i = 0; i < reference.size(); ++i)
+        {
+            if (i)
+                os << ", ";
+            os << reference.at(i);
+        }
+        return os << ']';
     }
 }
