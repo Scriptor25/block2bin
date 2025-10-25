@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -34,5 +35,18 @@ namespace b2b
             os << reference.at(i);
         }
         return os << ']';
+    }
+
+    template<typename K, typename V>
+    std::ostream &operator<<(std::ostream &os, const std::map<K, V> &reference)
+    {
+        os << '{';
+        for (auto it = reference.begin(); it != reference.end(); ++it)
+        {
+            if (it != reference.begin())
+                os << ", ";
+            os << it->first << ": " << it->second;
+        }
+        return os << '}';
     }
 }

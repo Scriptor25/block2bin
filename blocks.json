@@ -495,10 +495,10 @@
   "event_whenkeypressed": {
     "entry": true,
     "name": "event_whenkeypressed",
-    "inputs": [
-      "TODO"
-    ],
-    "fields": []
+    "inputs": [],
+    "fields": [
+      "KEY_OPTION"
+    ]
   },
   "event_whenthisspriteclicked": {
     "entry": true,
@@ -515,27 +515,28 @@
   "event_whenbackdropswitchesto": {
     "entry": true,
     "name": "event_whenbackdropswitchesto",
-    "inputs": [
-      "TODO"
-    ],
-    "fields": []
+    "inputs": [],
+    "fields": [
+      "BACKDROP"
+    ]
   },
   "event_whengreaterthan": {
     "entry": true,
     "name": "event_whengreaterthan",
     "inputs": [
-      "TODO",
-      "TODO"
+      "VALUE"
     ],
-    "fields": []
+    "fields": [
+      "WHENGREATERTHANMENU"
+    ]
   },
   "event_whenbroadcastreceived": {
     "entry": true,
     "name": "event_whenbroadcastreceived",
-    "inputs": [
-      "TODO"
-    ],
-    "fields": []
+    "inputs": [],
+    "fields": [
+      "BROADCAST_OPTION"
+    ]
   },
   "event_broadcast": {
     "entry": false,
@@ -659,18 +660,19 @@
     "entry": false,
     "name": "control_for_each",
     "inputs": [
-      "TODO",
-      "TODO",
-      "TODO"
+      "VALUE",
+      "SUBSTACK"
     ],
-    "fields": []
+    "fields": [
+      "VARIABLE"
+    ]
   },
   "control_while": {
     "entry": false,
     "name": "control_while",
     "inputs": [
-      "TODO",
-      "TODO"
+      "CONDITION",
+      "SUBSTACK"
     ],
     "fields": []
   },
@@ -696,7 +698,7 @@
     "entry": false,
     "name": "control_all_at_once",
     "inputs": [
-      "TODO"
+      "SUBSTACK"
     ],
     "fields": []
   },
@@ -1631,37 +1633,49 @@
     "entry": false,
     "name": "motion_goto_menu",
     "inputs": [],
-    "fields": []
+    "fields": [
+      "TO"
+    ]
   },
   "motion_glideto_menu": {
     "entry": false,
     "name": "motion_glideto_menu",
     "inputs": [],
-    "fields": []
+    "fields": [
+      "TO"
+    ]
   },
   "motion_pointtowards_menu": {
     "entry": false,
     "name": "motion_pointtowards_menu",
     "inputs": [],
-    "fields": []
+    "fields": [
+      "TOWARDS"
+    ]
   },
   "looks_costume": {
     "entry": false,
     "name": "looks_costume",
     "inputs": [],
-    "fields": []
+    "fields": [
+      "COSTUME"
+    ]
   },
   "looks_backdrops": {
     "entry": false,
     "name": "looks_backdrops",
     "inputs": [],
-    "fields": []
+    "fields": [
+      "BACKDROP"
+    ]
   },
   "sound_sounds_menu": {
     "entry": false,
     "name": "sound_sounds_menu",
     "inputs": [],
-    "fields": []
+    "fields": [
+      "SOUND_MENU"
+    ]
   },
   "event_broadcast_menu": {
     "entry": false,
@@ -1679,7 +1693,9 @@
     "entry": false,
     "name": "control_create_clone_of_menu",
     "inputs": [],
-    "fields": []
+    "fields": [
+      "CLONE_OPTION"
+    ]
   },
   "sensing_touchingobjectmenu": {
     "entry": false,

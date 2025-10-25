@@ -7,6 +7,8 @@
 #include <vector>
 #include <b2b/opcode.hpp>
 #include <b2b/option.hpp>
+#include <b2b/project_fwd.hpp>
+#include <b2b/tree_fwd.hpp>
 #include <nlohmann/json.hpp>
 
 namespace b2b
@@ -22,23 +24,29 @@ namespace b2b
         ValueT &operator=(ValueT &&) noexcept = default;
 
         virtual ~ValueT() = default;
-    };
 
-    using ValuePtr = std::unique_ptr<ValueT>;
+        virtual ExpressionNodePtr GenerateExpression() const = 0;
+    };
 
     struct NumberT final : ValueT
     {
-        double Value;
+        ExpressionNodePtr GenerateExpression() const override;
+
+        long double Value;
     };
 
     struct StringT final : ValueT
     {
+        ExpressionNodePtr GenerateExpression() const override;
+
         std::string Value;
     };
 
     struct ArrayT final : ValueT
     {
-        std::vector<ValuePtr> Value;
+        ExpressionNodePtr GenerateExpression() const override;
+
+        std::vector<ValuePtr> Values;
     };
 
     struct MutationT
@@ -78,8 +86,6 @@ namespace b2b
         bool HasNext;
     };
 
-    using MutationPtr = std::unique_ptr<MutationT>;
-
     struct BlockRefT
     {
         BlockRefT() = default;
@@ -91,10 +97,14 @@ namespace b2b
         BlockRefT &operator=(BlockRefT &&) noexcept = default;
 
         virtual ~BlockRefT() = default;
+
+        virtual ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const = 0;
     };
 
     struct IdRefT final : BlockRefT
     {
+        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const override;
+
         std::string Id;
     };
 
@@ -102,39 +112,32 @@ namespace b2b
     {
     };
 
-    enum PrimitiveRefE
-    {
-        Number          = 4,
-        PositiveNumber  = 5,
-        PositiveInteger = 6,
-        Integer         = 7,
-        Angle           = 8,
-        Color           = 9,
-        String          = 10,
-    };
-
     struct PrimitiveRefT final : ArrayRefT
     {
+        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const override;
+
         PrimitiveRefE Type;
         std::string Value;
     };
 
     struct BroadcastRefT final : ArrayRefT
     {
+        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const override;
+
         std::string Name;
         std::string Id;
     };
 
     struct VariableRefT final : ArrayRefT
     {
+        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const override;
+
         bool IsList;
         std::string Name;
         std::string Id;
         Option<double> X;
         Option<double> Y;
     };
-
-    using BlockRefPtr = std::unique_ptr<BlockRefT>;
 
     struct InputT
     {
@@ -157,16 +160,20 @@ namespace b2b
         BlockRefPtr Shadow;
     };
 
-    using InputPtr = std::unique_ptr<InputT>;
-
     struct FieldT final
     {
+        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const;
+
         ValuePtr Value;
         Option<std::string> Id;
     };
 
     struct BlockT final : BlockRefT
     {
+        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const override;
+        StatementNodePtr GenerateStatement(const ProjectT &project, const TargetPtr &target) const;
+        ParentNodePtr GenerateParent(const ProjectT &project, const TargetPtr &target) const;
+
         OpcodeE Opcode;
         Option<std::string> Next;
         Option<std::string> Parent;
@@ -220,8 +227,6 @@ namespace b2b
         unsigned Rate{};
         unsigned SampleCount{};
     };
-
-    using AssetPtr = std::unique_ptr<AssetT>;
 
     struct MonitorT final
     {
@@ -297,8 +302,6 @@ namespace b2b
         std::string RotationStyle;
     };
 
-    using TargetPtr = std::unique_ptr<TargetT>;
-
     struct MetaT final
     {
         std::string SemVer;
@@ -314,10 +317,11 @@ namespace b2b
         MetaT Meta;
     };
 
-    std::ostream &operator<<(std::ostream &os, const ValuePtr &reference);
-    std::ostream &operator<<(std::ostream &os, const NumberT &reference);
-    std::ostream &operator<<(std::ostream &os, const StringT &reference);
-    std::ostream &operator<<(std::ostream &os, const ArrayT &reference);
+    void GenerateStatements(
+        std::vector<StatementNodePtr> &nodes,
+        const ProjectT &project,
+        const TargetPtr &target,
+        const BlockT &block);
 
     template<typename T>
     void from_json(const nlohmann::json &json, Option<T> &reference)

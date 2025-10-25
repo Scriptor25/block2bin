@@ -6,166 +6,6 @@
 #include <b2b/tree.hpp>
 #include <b2b/zip.hpp>
 
-static void parse_expression_node(
-    std::vector<b2b::ExpressionNodePtr> &nodes,
-    const b2b::ProjectT &project,
-    const b2b::TargetPtr &target,
-    const b2b::BlockRefPtr &block)
-{
-    std::cerr << "TODO: parse expression node " << block << std::endl;
-}
-
-static void parse_statement_node(
-    std::vector<b2b::StatementNodePtr> &nodes,
-    const b2b::ProjectT &project,
-    const b2b::TargetPtr &target,
-    const b2b::BlockT &block)
-{
-    // if (!block.Inputs.empty())
-    // {
-    //     std::cerr << block.Opcode << ".inputs:" << std::endl;
-    //     for (auto &[key, value] : block.Inputs)
-    //     {
-    //         std::cerr << " " << key << " -> " << value << std::endl;
-    //     }
-    // }
-    // if (!block.Fields.empty())
-    // {
-    //     std::cerr << block.Opcode << ".fields:" << std::endl;
-    //     for (auto &[key, value] : block.Fields)
-    //     {
-    //         std::cerr << " " << key << " -> " << value.Id << "," << value.Value << std::endl;
-    //     }
-    // }
-
-    std::vector<b2b::ExpressionNodePtr> inputs;
-    std::vector<b2b::ExpressionNodePtr> fields;
-
-    const auto opcode = block.Opcode;
-
-    const auto input_count = b2b::GetInputCount(opcode);
-    for (unsigned i = 0; i < input_count; ++i)
-    {
-        const auto input_name = b2b::GetInputName(opcode, i);
-        auto &input = block.Inputs.at(input_name);
-        parse_expression_node(inputs, project, target, input->Block);
-    }
-
-    const auto field_count = b2b::GetFieldCount(opcode);
-    for (unsigned i = 0; i < field_count; ++i)
-    {
-        const auto field_name = b2b::GetFieldName(opcode, i);
-        auto &field = block.Fields.at(field_name);
-        // id -> pointer to block, list, variable, etc.
-        // value -> raw value, only if no id
-        std::cerr << "field " << field_name << ": id=\"" << field.Id << "\" value=" << field.Value << std::endl;
-    }
-}
-
-static void parse_procedure_node(
-    std::vector<b2b::ParentNodePtr> &nodes,
-    const b2b::ProjectT &project,
-    const b2b::TargetPtr &target,
-    const b2b::BlockT &block)
-{
-    const auto &id_ref = *b2b::cast<b2b::IdRefT>(block.Inputs.at("custom_block")->Block);
-    const auto &proc_block = b2b::cast<b2b::BlockT>(target->Blocks.at(id_ref.Id));
-    const auto &prototype = *b2b::cast<b2b::ProcedurePrototypeT>(*proc_block->Mutation);
-
-    auto node = std::make_unique<b2b::ProcedureNodeT>();
-    node->Name = prototype.ProcCode;
-
-    for (unsigned i = 0; i < prototype.ArgumentIds.size(); ++i)
-    {
-        node->Parameters.emplace_back(
-            prototype.ArgumentNames.at(i),
-            prototype.ArgumentDefaults.at(i));
-    }
-
-    for (auto next = &block; next && next->Next;)
-    {
-        auto &ref = target->Blocks.at(*next->Next);
-        next = b2b::cast<b2b::BlockT>(ref);
-
-        if (next)
-        {
-            parse_statement_node(node->Statements, project, target, *next);
-        }
-    }
-
-    nodes.emplace_back(std::move(node));
-}
-
-static void parse_constructor_node(
-    std::vector<b2b::ParentNodePtr> &nodes,
-    const b2b::ProjectT &project,
-    const b2b::TargetPtr &target,
-    const b2b::BlockT &block)
-{
-    auto node = std::make_unique<b2b::ConstructorNodeT>();
-
-    for (auto next = &block; next && next->Next;)
-    {
-        auto &ref = target->Blocks.at(*next->Next);
-        next = b2b::cast<b2b::BlockT>(ref);
-
-        if (next)
-        {
-            parse_statement_node(node->Statements, project, target, *next);
-        }
-    }
-
-    nodes.emplace_back(std::move(node));
-}
-
-static void parse_listener_node(
-    std::vector<b2b::ParentNodePtr> &nodes,
-    const b2b::ProjectT &project,
-    const b2b::TargetPtr &target,
-    const b2b::BlockT &block,
-    const std::string_view &event)
-{
-    auto node = std::make_unique<b2b::ListenerNodeT>();
-    node->Event = event;
-
-    for (auto next = &block; next && next->Next;)
-    {
-        auto &ref = target->Blocks.at(*next->Next);
-        next = b2b::cast<b2b::BlockT>(ref);
-
-        if (next)
-        {
-            parse_statement_node(node->Statements, project, target, *next);
-        }
-    }
-
-    nodes.emplace_back(std::move(node));
-}
-
-static void parse_parent_node(
-    std::vector<b2b::ParentNodePtr> &nodes,
-    const b2b::ProjectT &project,
-    const b2b::TargetPtr &target,
-    const b2b::BlockT &block)
-{
-    const auto opcode = block.Opcode;
-    if (!b2b::IsEntry(opcode))
-    {
-        std::cerr << "invalid parent node block opcode '" << opcode << "'" << std::endl;
-        return;
-    }
-
-    switch (opcode)
-    {
-    case b2b::control_start_as_clone:
-        return parse_constructor_node(nodes, project, target, block);
-    case b2b::procedures_definition:
-        return parse_procedure_node(nodes, project, target, block);
-    default:
-        return parse_listener_node(nodes, project, target, block, b2b::GetName(opcode));
-    }
-}
-
 int main()
 {
     // 1. extract source files and assets from project file
@@ -179,7 +19,7 @@ int main()
     // --> scratch runtime library!!!
     // --> whole scratch engine
 
-    const b2b::Zip zip("example.sb3");
+    const b2b::Zip zip("example2.sb3");
     if (!zip)
     {
         return 1;
@@ -234,7 +74,7 @@ int main()
         {
             if (const auto block = b2b::cast<b2b::BlockT>(ref); block && b2b::IsEntry(block->Opcode))
             {
-                parse_parent_node(entry_nodes, project, target, *block);
+                entry_nodes.emplace_back(block->GenerateParent(project, target));
             }
         }
     }

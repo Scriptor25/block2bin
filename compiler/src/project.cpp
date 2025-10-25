@@ -1,30 +1,444 @@
 #include <b2b/common.hpp>
 #include <b2b/project.hpp>
+#include <b2b/tree.hpp>
 
-std::ostream &b2b::operator<<(std::ostream &os, const ValuePtr &reference)
+b2b::ExpressionNodePtr b2b::NumberT::GenerateExpression() const
 {
-    if (const auto p = cast<NumberT>(reference))
-        return os << *p;
-    if (const auto p = cast<StringT>(reference))
-        return os << *p;
-    if (const auto p = cast<ArrayT>(reference))
-        return os << *p;
-    return os << reference.get();
+    auto node = std::make_unique<ConstantFloatingPointNodeT>();
+    node->Value = Value;
+    return std::move(node);
 }
 
-std::ostream &b2b::operator<<(std::ostream &os, const NumberT &reference)
+b2b::ExpressionNodePtr b2b::StringT::GenerateExpression() const
 {
-    return os << reference.Value;
+    auto node = std::make_unique<ConstantStringNodeT>();
+    node->Value = Value;
+    return std::move(node);
 }
 
-std::ostream &b2b::operator<<(std::ostream &os, const StringT &reference)
+b2b::ExpressionNodePtr b2b::ArrayT::GenerateExpression() const
 {
-    return os << '"' << reference.Value << '"';
+    auto node = std::make_unique<ConstantArrayNodeT>();
+    for (auto &value : Values)
+    {
+        node->Values.emplace_back(value->GenerateExpression());
+    }
+    return std::move(node);
 }
 
-std::ostream &b2b::operator<<(std::ostream &os, const ArrayT &reference)
+b2b::ExpressionNodePtr b2b::IdRefT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
 {
-    return os << reference.Value;
+    return target->Blocks.at(Id)->GenerateExpression(project, target);
+}
+
+b2b::ExpressionNodePtr b2b::PrimitiveRefT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
+{
+    switch (Type)
+    {
+    case Number:
+    {
+        auto node = std::make_unique<ConstantFloatingPointNodeT>();
+        node->Value = std::stold(Value);
+        return std::move(node);
+    }
+    case PositiveNumber:
+    {
+        auto node = std::make_unique<ConstantFloatingPointNodeT>();
+        node->Value = std::stold(Value);
+        return std::move(node);
+    }
+    case PositiveInteger:
+    {
+        auto node = std::make_unique<ConstantIntegerNodeT>();
+        node->Value = std::stoull(Value);
+        return std::move(node);
+    }
+    case Integer:
+    {
+        auto node = std::make_unique<ConstantIntegerNodeT>();
+        node->Value = std::stoll(Value);
+        return std::move(node);
+    }
+    case Angle:
+    {
+        auto node = std::make_unique<ConstantFloatingPointNodeT>();
+        node->Value = std::stold(Value);
+        return std::move(node);
+    }
+    case Color:
+    {
+        throw std::runtime_error("TODO");
+    }
+    case String:
+    {
+        auto node = std::make_unique<ConstantStringNodeT>();
+        node->Value = Value;
+        return std::move(node);
+    }
+    }
+
+    throw std::runtime_error("undefined primitive type");
+}
+
+b2b::ExpressionNodePtr b2b::BroadcastRefT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
+{
+    if (target->Broadcasts.contains(Id))
+    {
+        auto broadcast = std::make_unique<ConstantBroadcastNodeT>();
+        broadcast->Id = Id;
+        return std::move(broadcast);
+    }
+
+    for (auto &foreign : project.Targets)
+    {
+        if (foreign->Broadcasts.contains(Id))
+        {
+            auto broadcast = std::make_unique<ConstantBroadcastNodeT>();
+            broadcast->Id = Id;
+            return std::move(broadcast);
+        }
+    }
+
+    throw std::runtime_error("undefined broadcast");
+}
+
+b2b::ExpressionNodePtr b2b::VariableRefT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
+{
+    if (IsList)
+    {
+        if (target->Lists.contains(Id))
+        {
+            auto list = std::make_unique<ConstantListNodeT>();
+            list->Id = Id;
+            return std::move(list);
+        }
+
+        for (auto &foreign : project.Targets)
+        {
+            if (foreign->Lists.contains(Id))
+            {
+                auto list = std::make_unique<ConstantListNodeT>();
+                list->Id = Id;
+                return std::move(list);
+            }
+        }
+
+        throw std::runtime_error("undefined list");
+    }
+
+    if (target->Variables.contains(Id))
+    {
+        auto variable = std::make_unique<ConstantVariableNodeT>();
+        variable->Id = Id;
+        return std::move(variable);
+    }
+
+    for (auto &foreign : project.Targets)
+    {
+        if (foreign->Variables.contains(Id))
+        {
+            auto variable = std::make_unique<ConstantVariableNodeT>();
+            variable->Id = Id;
+            return std::move(variable);
+        }
+    }
+
+    throw std::runtime_error("undefined variable");
+}
+
+b2b::ExpressionNodePtr b2b::FieldT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
+{
+    if (Id)
+    {
+        for (auto &t : project.Targets)
+        {
+            if (t->Variables.contains(*Id))
+            {
+                auto variable = std::make_unique<ConstantVariableNodeT>();
+                variable->Id = *Id;
+                return std::move(variable);
+            }
+            if (t->Lists.contains(*Id))
+            {
+                auto list = std::make_unique<ConstantListNodeT>();
+                list->Id = *Id;
+                return std::move(list);
+            }
+            if (t->Broadcasts.contains(*Id))
+            {
+                auto broadcast = std::make_unique<ConstantBroadcastNodeT>();
+                broadcast->Id = *Id;
+                return std::move(broadcast);
+            }
+        }
+        throw std::runtime_error("undefined entity");
+    }
+
+    return Value->GenerateExpression();
+}
+
+b2b::ExpressionNodePtr b2b::BlockT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
+{
+    auto node = std::make_unique<GenericExpressionNodeT>();
+    node->Opcode = Opcode;
+
+    const auto input_count = GetInputCount(node->Opcode);
+    for (unsigned i = 0; i < input_count; ++i)
+    {
+        const auto input_name = GetInputName(node->Opcode, i);
+        const auto &input = Inputs.at(input_name);
+        node->Inputs.emplace_back(input->Block->GenerateExpression(project, target));
+    }
+
+    const auto field_count = GetFieldCount(node->Opcode);
+    for (unsigned i = 0; i < field_count; ++i)
+    {
+        const auto field_name = GetFieldName(node->Opcode, i);
+        const auto &field = Fields.at(field_name);
+        node->Fields.emplace_back(field.GenerateExpression(project, target));
+    }
+
+    return std::move(node);
+}
+
+b2b::StatementNodePtr b2b::BlockT::GenerateStatement(const ProjectT &project, const TargetPtr &target) const
+{
+    switch (Opcode)
+    {
+    case control_repeat:
+    {
+        auto node = std::make_unique<ForEachStatementNodeT>();
+
+        auto &input_times = Inputs.at("TIMES");
+        auto &input_substack = Inputs.at("SUBSTACK");
+
+        node->Times = input_times->Block->GenerateExpression(project, target);
+
+        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+        GenerateStatements(node->Statements, project, target, block);
+
+        return std::move(node);
+    }
+    case control_forever:
+    {
+        auto node = std::make_unique<WhileStatementNodeT>();
+
+        auto &input_substack = Inputs.at("SUBSTACK");
+
+        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+        GenerateStatements(node->Statements, project, target, block);
+
+        return std::move(node);
+    }
+    case control_if:
+    {
+        auto node = std::make_unique<IfElseStatementNodeT>();
+        node->HasElse = false;
+
+        auto &input_condition = Inputs.at("CONDITION");
+        auto &input_substack = Inputs.at("SUBSTACK");
+
+        node->Condition = input_condition->Block->GenerateExpression(project, target);
+
+        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+        GenerateStatements(node->ThenStatements, project, target, block);
+
+        return std::move(node);
+    }
+    case control_if_else:
+    {
+        auto node = std::make_unique<IfElseStatementNodeT>();
+        node->HasElse = true;
+
+        auto &input_condition = Inputs.at("CONDITION");
+        auto &input_substack = Inputs.at("SUBSTACK");
+        auto &input_substack2 = Inputs.at("SUBSTACK2");
+
+        node->Condition = input_condition->Block->GenerateExpression(project, target);
+
+        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+        GenerateStatements(node->ThenStatements, project, target, block);
+
+        const auto &block2_id = *b2b::cast<IdRefT>(input_substack2->Block);
+        const auto &block2 = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+        GenerateStatements(node->ElseStatements, project, target, block2);
+
+        return std::move(node);
+    }
+    case control_repeat_until:
+    {
+        auto node = std::make_unique<WhileStatementNodeT>();
+
+        auto &input_condition = Inputs.at("CONDITION");
+        auto &input_substack = Inputs.at("SUBSTACK");
+
+        auto condition = std::make_unique<NotExpressionNodeT>();
+        condition->Value = input_condition->Block->GenerateExpression(project, target);
+        node->Condition = std::move(condition);
+
+        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+        GenerateStatements(node->Statements, project, target, block);
+
+        return std::move(node);
+    }
+    case control_for_each:
+    {
+        // for ([variable] = 1; [variable] <= <value>; [variable]++) {
+        //   (substack)
+        // }
+
+        auto node = std::make_unique<ForEachStatementNodeT>();
+
+        auto &input_value = Inputs.at("VALUE");
+        auto &input_substack = Inputs.at("SUBSTACK");
+
+        auto &field_variable = Fields.at("VARIABLE");
+
+        node->Variable = field_variable.GenerateExpression(project, target);
+
+        node->Times = input_value->Block->GenerateExpression(project, target);
+
+        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+        GenerateStatements(node->Statements, project, target, block);
+
+        return std::move(node);
+    }
+    case control_while:
+    {
+        auto node = std::make_unique<WhileStatementNodeT>();
+
+        auto &input_condition = Inputs.at("CONDITION");
+        auto &input_substack = Inputs.at("SUBSTACK");
+
+        node->Condition = input_condition->Block->GenerateExpression(project, target);
+
+        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+        GenerateStatements(node->Statements, project, target, block);
+
+        return std::move(node);
+    }
+    case control_all_at_once:
+    {
+        auto node = std::make_unique<InstantStatementNodeT>();
+
+        auto &input_substack = Inputs.at("SUBSTACK");
+
+        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+        GenerateStatements(node->Statements, project, target, block);
+
+        return std::move(node);
+    }
+
+    default:
+        break;
+    }
+
+    return GenerateExpression(project, target);
+}
+
+b2b::ParentNodePtr b2b::BlockT::GenerateParent(const ProjectT &project, const TargetPtr &target) const
+{
+    if (!IsEntry(Opcode))
+    {
+        throw std::runtime_error("invalid parent node block opcode");
+    }
+
+    switch (Opcode)
+    {
+    case control_start_as_clone:
+    {
+        auto node = std::make_unique<ConstructorNodeT>();
+
+        if (Next)
+        {
+            const auto &next = *cast<BlockT>(target->Blocks.at(*Next));
+            GenerateStatements(node->Statements, project, target, next);
+        }
+
+        return std::move(node);
+    }
+    case procedures_definition:
+    {
+        const auto id_ref = b2b::cast<IdRefT>(Inputs.at("custom_block")->Block);
+        const auto proc_block = b2b::cast<BlockT>(target->Blocks.at(id_ref->Id));
+        const auto prototype = b2b::cast<ProcedurePrototypeT>(*proc_block->Mutation);
+
+        auto node = std::make_unique<ProcedureNodeT>();
+        node->Name = prototype->ProcCode;
+
+        for (unsigned i = 0; i < prototype->ArgumentIds.size(); ++i)
+        {
+            node->Parameters.emplace_back(
+                prototype->ArgumentNames.at(i),
+                prototype->ArgumentDefaults.at(i));
+        }
+
+        if (Next)
+        {
+            const auto &next = *cast<BlockT>(target->Blocks.at(*Next));
+            GenerateStatements(node->Statements, project, target, next);
+        }
+
+        return std::move(node);
+    }
+    default:
+    {
+        auto node = std::make_unique<ListenerNodeT>();
+        node->Event = GetName(Opcode);
+
+        const auto input_count = GetInputCount(Opcode);
+        for (unsigned i = 0; i < input_count; ++i)
+        {
+            const auto input_name = GetInputName(Opcode, i);
+            const auto &input = Inputs.at(input_name);
+            node->Inputs.emplace_back(input->Block->GenerateExpression(project, target));
+        }
+
+        const auto field_count = GetFieldCount(Opcode);
+        for (unsigned i = 0; i < field_count; ++i)
+        {
+            const auto field_name = GetFieldName(Opcode, i);
+            const auto &field = Fields.at(field_name);
+            node->Fields.emplace_back(field.GenerateExpression(project, target));
+        }
+
+        if (Next)
+        {
+            const auto &next = *cast<BlockT>(target->Blocks.at(*Next));
+            GenerateStatements(node->Statements, project, target, next);
+        }
+
+        return std::move(node);
+    }
+    }
+}
+
+void b2b::GenerateStatements(
+    std::vector<StatementNodePtr> &nodes,
+    const ProjectT &project,
+    const TargetPtr &target,
+    const BlockT &block)
+{
+    for (auto next = &block; next;)
+    {
+        nodes.emplace_back(next->GenerateStatement(project, target));
+
+        if (!next->Next)
+        {
+            break;
+        }
+
+        auto &ref = target->Blocks.at(*next->Next);
+        next = b2b::cast<BlockT>(ref);
+    }
 }
 
 void b2b::from_json(const nlohmann::json &json, ProjectT &reference)
@@ -386,5 +800,5 @@ void b2b::from_json(const nlohmann::json &json, StringT &reference)
 
 void b2b::from_json(const nlohmann::json &json, ArrayT &reference)
 {
-    reference.Value = json;
+    reference.Values = json;
 }
