@@ -26,12 +26,16 @@ b2b::ExpressionNodePtr b2b::ArrayT::GenerateExpression() const
     return std::move(node);
 }
 
-b2b::ExpressionNodePtr b2b::IdRefT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
+b2b::ExpressionNodePtr b2b::IdRefT::GenerateExpression(
+    const ProjectT &project,
+    const TargetPtr &target) const
 {
     return target->Blocks.at(Id)->GenerateExpression(project, target);
 }
 
-b2b::ExpressionNodePtr b2b::PrimitiveRefT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
+b2b::ExpressionNodePtr b2b::PrimitiveRefT::GenerateExpression(
+    const ProjectT &project,
+    const TargetPtr &target) const
 {
     switch (Type)
     {
@@ -80,20 +84,16 @@ b2b::ExpressionNodePtr b2b::PrimitiveRefT::GenerateExpression(const ProjectT &pr
     throw std::runtime_error("undefined primitive type");
 }
 
-b2b::ExpressionNodePtr b2b::BroadcastRefT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
+b2b::ExpressionNodePtr b2b::BroadcastRefT::GenerateExpression(
+    const ProjectT &project,
+    const TargetPtr &target) const
 {
-    if (target->Broadcasts.contains(Id))
+    for (auto &t : project.Targets)
     {
-        auto broadcast = std::make_unique<ConstantBroadcastNodeT>();
-        broadcast->Id = Id;
-        return std::move(broadcast);
-    }
-
-    for (auto &foreign : project.Targets)
-    {
-        if (foreign->Broadcasts.contains(Id))
+        if (t->Broadcasts.contains(Id))
         {
             auto broadcast = std::make_unique<ConstantBroadcastNodeT>();
+            broadcast->TargetId = t->Id;
             broadcast->Id = Id;
             return std::move(broadcast);
         }
@@ -102,22 +102,18 @@ b2b::ExpressionNodePtr b2b::BroadcastRefT::GenerateExpression(const ProjectT &pr
     throw std::runtime_error("undefined broadcast");
 }
 
-b2b::ExpressionNodePtr b2b::VariableRefT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
+b2b::ExpressionNodePtr b2b::VariableRefT::GenerateExpression(
+    const ProjectT &project,
+    const TargetPtr &target) const
 {
     if (IsList)
     {
-        if (target->Lists.contains(Id))
+        for (auto &t : project.Targets)
         {
-            auto list = std::make_unique<ConstantListNodeT>();
-            list->Id = Id;
-            return std::move(list);
-        }
-
-        for (auto &foreign : project.Targets)
-        {
-            if (foreign->Lists.contains(Id))
+            if (t->Lists.contains(Id))
             {
                 auto list = std::make_unique<ConstantListNodeT>();
+                list->TargetId = t->Id;
                 list->Id = Id;
                 return std::move(list);
             }
@@ -126,18 +122,12 @@ b2b::ExpressionNodePtr b2b::VariableRefT::GenerateExpression(const ProjectT &pro
         throw std::runtime_error("undefined list");
     }
 
-    if (target->Variables.contains(Id))
+    for (auto &t : project.Targets)
     {
-        auto variable = std::make_unique<ConstantVariableNodeT>();
-        variable->Id = Id;
-        return std::move(variable);
-    }
-
-    for (auto &foreign : project.Targets)
-    {
-        if (foreign->Variables.contains(Id))
+        if (t->Variables.contains(Id))
         {
             auto variable = std::make_unique<ConstantVariableNodeT>();
+            variable->TargetId = t->Id;
             variable->Id = Id;
             return std::move(variable);
         }
@@ -146,7 +136,9 @@ b2b::ExpressionNodePtr b2b::VariableRefT::GenerateExpression(const ProjectT &pro
     throw std::runtime_error("undefined variable");
 }
 
-b2b::ExpressionNodePtr b2b::FieldT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
+b2b::ExpressionNodePtr b2b::FieldT::GenerateExpression(
+    const ProjectT &project,
+    const TargetPtr &target) const
 {
     if (Id)
     {
@@ -155,18 +147,21 @@ b2b::ExpressionNodePtr b2b::FieldT::GenerateExpression(const ProjectT &project, 
             if (t->Variables.contains(*Id))
             {
                 auto variable = std::make_unique<ConstantVariableNodeT>();
+                variable->TargetId = t->Id;
                 variable->Id = *Id;
                 return std::move(variable);
             }
             if (t->Lists.contains(*Id))
             {
                 auto list = std::make_unique<ConstantListNodeT>();
+                list->TargetId = t->Id;
                 list->Id = *Id;
                 return std::move(list);
             }
             if (t->Broadcasts.contains(*Id))
             {
                 auto broadcast = std::make_unique<ConstantBroadcastNodeT>();
+                broadcast->TargetId = t->Id;
                 broadcast->Id = *Id;
                 return std::move(broadcast);
             }
@@ -177,7 +172,9 @@ b2b::ExpressionNodePtr b2b::FieldT::GenerateExpression(const ProjectT &project, 
     return Value->GenerateExpression();
 }
 
-b2b::ExpressionNodePtr b2b::BlockT::GenerateExpression(const ProjectT &project, const TargetPtr &target) const
+b2b::ExpressionNodePtr b2b::BlockT::GenerateExpression(
+    const ProjectT &project,
+    const TargetPtr &target) const
 {
     auto node = std::make_unique<GenericExpressionNodeT>();
     node->Opcode = Opcode;

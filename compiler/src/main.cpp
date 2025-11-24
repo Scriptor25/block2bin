@@ -5,6 +5,9 @@
 #include <b2b/project.hpp>
 #include <b2b/tree.hpp>
 #include <b2b/zip.hpp>
+#include <b2b/ir/builder.hpp>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/Module.h>
 
 int main()
 {
@@ -55,8 +58,33 @@ int main()
         blobs.emplace(stat.name, std::move(blob));
     }
 
+    llvm::LLVMContext llvm_context;
+    llvm::Module llvm_module("game", llvm_context);
+
+    b2b::ir::Builder builder(llvm_context, llvm_module);
+
     for (const auto &target : project.Targets)
     {
+        b2b::TargetTypeT target_type;
+
+        for (auto &[id, variable] : target->Variables)
+        {
+            auto initial_value = variable.Value->GenerateExpression();
+
+            target_type.Fields.emplace_back(id, variable.Name, std::move(initial_value));
+        }
+
+        for (auto &[id, list] : target->Lists)
+        {
+            auto initial_value = std::make_unique<b2b::ConstantArrayNodeT>();
+            for (auto &value : list.Values)
+            {
+                initial_value->Values.emplace_back(value->GenerateExpression());
+            }
+
+            target_type.Fields.emplace_back(id, list.Name, std::move(initial_value));
+        }
+
         for (const auto &costume : target->Costumes)
         {
             const auto &blob = blobs.at(costume->MD5Ext);
@@ -69,12 +97,12 @@ int main()
             (void) blob;
         }
 
-        std::vector<b2b::ParentNodePtr> entry_nodes;
         for (const auto &ref : target->Blocks | std::views::values)
         {
             if (const auto block = b2b::cast<b2b::BlockT>(ref); block && b2b::IsEntry(block->Opcode))
             {
-                entry_nodes.emplace_back(block->GenerateParent(project, target));
+                auto node = block->GenerateParent(project, target);
+                (void) node;
             }
         }
     }
@@ -88,6 +116,8 @@ int main()
     {
         (void) extension;
     }
+
+    llvm_module.print(llvm::outs(), nullptr);
 
     return 0;
 }

@@ -25,26 +25,26 @@ namespace b2b
 
         virtual ~ValueT() = default;
 
-        virtual ExpressionNodePtr GenerateExpression() const = 0;
+        [[nodiscard]] virtual ExpressionNodePtr GenerateExpression() const = 0;
     };
 
     struct NumberT final : ValueT
     {
-        ExpressionNodePtr GenerateExpression() const override;
+        [[nodiscard]] ExpressionNodePtr GenerateExpression() const override;
 
         long double Value;
     };
 
     struct StringT final : ValueT
     {
-        ExpressionNodePtr GenerateExpression() const override;
+        [[nodiscard]] ExpressionNodePtr GenerateExpression() const override;
 
         std::string Value;
     };
 
     struct ArrayT final : ValueT
     {
-        ExpressionNodePtr GenerateExpression() const override;
+        [[nodiscard]] ExpressionNodePtr GenerateExpression() const override;
 
         std::vector<ValuePtr> Values;
     };
@@ -98,12 +98,16 @@ namespace b2b
 
         virtual ~BlockRefT() = default;
 
-        virtual ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const = 0;
+        [[nodiscard]] virtual ExpressionNodePtr GenerateExpression(
+            const ProjectT &project,
+            const TargetPtr &target) const = 0;
     };
 
     struct IdRefT final : BlockRefT
     {
-        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const override;
+        [[nodiscard]] ExpressionNodePtr GenerateExpression(
+            const ProjectT &project,
+            const TargetPtr &target) const override;
 
         std::string Id;
     };
@@ -114,7 +118,9 @@ namespace b2b
 
     struct PrimitiveRefT final : ArrayRefT
     {
-        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const override;
+        [[nodiscard]] ExpressionNodePtr GenerateExpression(
+            const ProjectT &project,
+            const TargetPtr &target) const override;
 
         PrimitiveRefE Type;
         std::string Value;
@@ -122,7 +128,9 @@ namespace b2b
 
     struct BroadcastRefT final : ArrayRefT
     {
-        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const override;
+        [[nodiscard]] ExpressionNodePtr GenerateExpression(
+            const ProjectT &project,
+            const TargetPtr &target) const override;
 
         std::string Name;
         std::string Id;
@@ -130,7 +138,9 @@ namespace b2b
 
     struct VariableRefT final : ArrayRefT
     {
-        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const override;
+        [[nodiscard]] ExpressionNodePtr GenerateExpression(
+            const ProjectT &project,
+            const TargetPtr &target) const override;
 
         bool IsList;
         std::string Name;
@@ -162,7 +172,7 @@ namespace b2b
 
     struct FieldT final
     {
-        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const;
+        [[nodiscard]] ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const;
 
         ValuePtr Value;
         Option<std::string> Id;
@@ -170,9 +180,11 @@ namespace b2b
 
     struct BlockT final : BlockRefT
     {
-        ExpressionNodePtr GenerateExpression(const ProjectT &project, const TargetPtr &target) const override;
-        StatementNodePtr GenerateStatement(const ProjectT &project, const TargetPtr &target) const;
-        ParentNodePtr GenerateParent(const ProjectT &project, const TargetPtr &target) const;
+        [[nodiscard]] ExpressionNodePtr GenerateExpression(
+            const ProjectT &project,
+            const TargetPtr &target) const override;
+        [[nodiscard]] StatementNodePtr GenerateStatement(const ProjectT &project, const TargetPtr &target) const;
+        [[nodiscard]] ParentNodePtr GenerateParent(const ProjectT &project, const TargetPtr &target) const;
 
         OpcodeE Opcode;
         Option<std::string> Next;
@@ -270,6 +282,7 @@ namespace b2b
 
         virtual ~TargetT() = default;
 
+        unsigned Id = ~0u;
         std::string Name;
         std::map<std::string, VariableT> Variables;
         std::map<std::string, ListT> Lists;

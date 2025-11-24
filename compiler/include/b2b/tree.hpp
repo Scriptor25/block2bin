@@ -2,11 +2,25 @@
 
 #include <string>
 #include <vector>
+#include <b2b/opcode.hpp>
 #include <b2b/tree_fwd.hpp>
 
 namespace b2b
 {
-    struct ParameterT
+    struct TargetTypeFieldT final
+    {
+        std::string Id;
+        std::string Name;
+        ExpressionNodePtr InitialValue;
+    };
+
+    struct TargetTypeT final
+    {
+        std::string Name;
+        std::vector<TargetTypeFieldT> Fields;
+    };
+
+    struct ParameterT final
     {
         std::string Name;
         std::string Default;
@@ -94,19 +108,19 @@ namespace b2b
 
     struct ConstantBroadcastNodeT final : ExpressionNodeT
     {
-        // TODO: target
+        unsigned TargetId;
         std::string Id;
     };
 
     struct ConstantVariableNodeT final : ExpressionNodeT
     {
-        // TODO: target
+        unsigned TargetId;
         std::string Id;
     };
 
     struct ConstantListNodeT final : ExpressionNodeT
     {
-        // TODO: target
+        unsigned TargetId;
         std::string Id;
     };
 

@@ -5,6 +5,10 @@
 namespace b2b
 {
     struct ParameterT;
+
+    struct TargetTypeFieldT;
+    struct TargetTypeT;
+
     struct ParentNodeT;
     struct StatementNodeT;
     struct ExpressionNodeT;
