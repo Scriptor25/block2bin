@@ -414,9 +414,9 @@ void b2b::from_json(const nlohmann::json &json, OpcodeT &reference)
 {
     reference = {
         .IsEntry = json["entry"],
-        .Name = json["name"],
-        .Inputs = json["inputs"],
-        .Fields = json["fields"],
+        .Name    = json["name"],
+        .Inputs  = json["inputs"],
+        .Fields  = json["fields"],
     };
 }
 
@@ -426,7 +426,7 @@ void b2b::from_json(const nlohmann::json &json, OpcodeFieldT &reference)
     {
         reference = {
             .IsEnum = false,
-            .Name = json.get<std::string>(),
+            .Name   = json.get<std::string>(),
             .Values = {},
         };
         return;
@@ -434,7 +434,7 @@ void b2b::from_json(const nlohmann::json &json, OpcodeFieldT &reference)
 
     reference = {
         .IsEnum = true,
-        .Name = json["name"],
+        .Name   = json["name"],
         .Values = json["values"],
     };
 }

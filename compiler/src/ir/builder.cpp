@@ -38,14 +38,14 @@ llvm::Value *b2b::ir::Builder::CreateInstance(const TargetTypeT &target_type)
     const auto type = CreateType(target_type);
     const auto pointer = CreateInstancePointer(type);
 
-    llvm::Value *initial_value = llvm::Constant::getNullValue(type);
-    for (unsigned i = 0; i < target_type.Fields.size(); ++i)
-    {
-        auto &field = target_type.Fields.at(i);
-        auto field_pointer = CreateFieldPointer();
-        auto field_value = field.InitialValue->Generate();
-        initial_value = m_Builder.CreateInsertValue(initial_value, field_value, i);
-    }
+    // llvm::Value *initial_value = llvm::Constant::getNullValue(type);
+    // for (unsigned i = 0; i < target_type.Fields.size(); ++i)
+    // {
+    //     auto &field = target_type.Fields.at(i);
+    //     auto field_pointer = CreateFieldPointer();
+    //     auto field_value = field.InitialValue->Generate();
+    //     initial_value = m_Builder.CreateInsertValue(initial_value, field_value, i);
+    // }
 
     return pointer;
 }
