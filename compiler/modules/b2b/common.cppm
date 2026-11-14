@@ -1,10 +1,13 @@
-#pragma once
+module;
 
 #include <map>
 #include <memory>
+#include <ostream>
 #include <vector>
 
-namespace b2b
+export module b2b.common;
+
+export namespace b2b
 {
     template<typename D, typename S>
     D *cast(const std::unique_ptr<S> &ptr)
@@ -18,7 +21,7 @@ namespace b2b
         auto s = ptr.release();
         if (auto d = dynamic_cast<D *>(s))
         {
-            return std::unique_ptr<D *>(d);
+            return std::unique_ptr<D>(d);
         }
         delete s;
         return std::unique_ptr<D>();

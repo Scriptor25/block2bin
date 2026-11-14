@@ -1,7 +1,11 @@
-#include <b2b/opcode.hpp>
+module;
+
+#include <json/json.hxx>
 
 #include <map>
 #include <ranges>
+
+module b2b.opcode;
 
 b2b::OpcodeE b2b::ToOpcode(const std::string &string)
 {
@@ -361,13 +365,16 @@ static std::map<b2b::OpcodeE, b2b::OpcodeT> dictionary;
 
 void b2b::ReadDictionary(std::istream &stream)
 {
-    nlohmann::json json;
+    json::node json;
     stream >> json;
 
-    for (auto map = json.get<std::map<std::string, OpcodeT>>(); auto &[key, value] : map)
-    {
-        dictionary.emplace(ToOpcode(key), std::move(value));
-    }
+    if (std::map<std::string, OpcodeT> map; json >> map)
+        for (auto &[key, value] : map)
+        {
+            dictionary.emplace(ToOpcode(key), std::move(value));
+        }
+    else
+        throw std::runtime_error("TODO");
 }
 
 bool b2b::IsEntry(const OpcodeE opcode)
@@ -405,37 +412,53 @@ std::ostream &b2b::operator<<(std::ostream &stream, const OpcodeE opcode)
     return stream << dictionary.at(opcode).Name;
 }
 
-void b2b::from_json(const nlohmann::json &json, OpcodeE &reference)
+bool data::serializer<json::node, b2b::OpcodeE>::from_data(const json::node &json, b2b::OpcodeE &reference)
 {
-    const auto string = json.get<std::string>();
-    reference = ToOpcode(string);
+    if (std::string str; json >> str)
+    {
+        reference = b2b::ToOpcode(str);
+        return true;
+    }
+
+    return false;
 }
 
-void b2b::from_json(const nlohmann::json &json, OpcodeT &reference)
+bool data::serializer<json::node, b2b::OpcodeT>::from_data(const json::node &json, b2b::OpcodeT &reference)
 {
-    reference = {
-        .IsEntry = json["entry"],
-        .Name    = json["name"],
-        .Inputs  = json["inputs"],
-        .Fields  = json["fields"],
-    };
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["entry"] >> reference.IsEntry;
+    ok &= json["name"] >> reference.Name;
+    ok &= json["inputs"] >> reference.Inputs;
+    ok &= json["fields"] >> reference.Fields;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, OpcodeFieldT &reference)
+bool data::serializer<json::node, b2b::OpcodeFieldT>::from_data(const json::node &json, b2b::OpcodeFieldT &reference)
 {
-    if (json.is_string())
+    if (std::string str; json >> str)
     {
         reference = {
             .IsEnum = false,
-            .Name   = json.get<std::string>(),
+            .Name   = std::move(str),
             .Values = {},
         };
-        return;
+        return true;
     }
 
-    reference = {
-        .IsEnum = true,
-        .Name   = json["name"],
-        .Values = json["values"],
-    };
+    if (!json.is<json::object>())
+        return false;
+
+    reference.IsEnum = true;
+
+    bool ok = true;
+
+    ok &= json["name"] >> reference.Name;
+    ok &= json["values"] >> reference.Values;
+
+    return ok;
 }

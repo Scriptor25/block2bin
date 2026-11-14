@@ -1,5 +1,10 @@
-#include <b2b/tree.hpp>
-#include <b2b/ir/builder.hpp>
+module;
+
+#include <llvm/IR/DerivedTypes.h>
+#include <llvm/IR/Type.h>
+#include <llvm/IR/Value.h>
+
+module b2b.ir.builder;
 
 b2b::ir::Builder::Builder(llvm::LLVMContext &context, llvm::Module &module)
     : m_Context(context),
@@ -19,6 +24,7 @@ llvm::Value *b2b::ir::Builder::CreateAlloca(llvm::Type *type)
 
 llvm::Value *b2b::ir::Builder::CreateInstancePointer(llvm::Type *type)
 {
+    throw std::runtime_error("TODO");
 }
 
 llvm::Type *b2b::ir::Builder::CreateType(const TargetTypeT &target_type)

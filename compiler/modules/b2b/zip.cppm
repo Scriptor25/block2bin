@@ -1,8 +1,10 @@
-#pragma once
+module;
 
 #include <zip.h>
 
-namespace b2b
+export module b2b.zip;
+
+export namespace b2b
 {
     class Zip
     {

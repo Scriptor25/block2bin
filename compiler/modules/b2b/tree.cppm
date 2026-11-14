@@ -1,13 +1,28 @@
-#pragma once
+module;
 
-#include <b2b/opcode.hpp>
-#include <b2b/tree_fwd.hpp>
-
+#include <memory>
 #include <string>
 #include <vector>
 
-namespace b2b
+export module b2b.tree;
+
+import b2b.opcode;
+
+export namespace b2b
 {
+    struct ParameterT;
+
+    struct TargetTypeFieldT;
+    struct TargetTypeT;
+
+    struct ParentNodeT;
+    struct StatementNodeT;
+    struct ExpressionNodeT;
+
+    using ParentNodePtr = std::unique_ptr<ParentNodeT>;
+    using StatementNodePtr = std::unique_ptr<StatementNodeT>;
+    using ExpressionNodePtr = std::unique_ptr<ExpressionNodeT>;
+
     struct TargetTypeFieldT final
     {
         std::string Id;

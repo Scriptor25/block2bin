@@ -1,10 +1,12 @@
-#pragma once
-
-#include <b2b/tree_fwd.hpp>
+module;
 
 #include <llvm/IR/IRBuilder.h>
 
-namespace b2b::ir
+export module b2b.ir.builder;
+
+import b2b.tree;
+
+export namespace b2b::ir
 {
     class Builder
     {

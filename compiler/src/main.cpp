@@ -1,15 +1,22 @@
-#include <b2b/common.hpp>
-#include <b2b/project.hpp>
-#include <b2b/tree.hpp>
-#include <b2b/zip.hpp>
-#include <b2b/ir/builder.hpp>
+#include <json/json.hxx>
 
+#include <llvm/IR/IRBuilder.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
 
 #include <fstream>
 #include <iostream>
+#include <map>
+#include <ranges>
+#include <sstream>
 #include <vector>
+
+import b2b.zip;
+import b2b.opcode;
+import b2b.project;
+import b2b.ir.builder;
+import b2b.tree;
+import b2b.common;
 
 int main()
 {
@@ -49,7 +56,14 @@ int main()
 
         if (std::string_view(stat.name).ends_with(".json"))
         {
-            project = nlohmann::json::parse(blob);
+            std::istringstream stream(std::string(blob.begin(), blob.end()));
+
+            json::node project_node;
+            stream >> project_node;
+
+            if (!(project_node >> project))
+                throw std::runtime_error("TODO");
+
             continue;
         }
 

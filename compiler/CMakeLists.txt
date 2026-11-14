@@ -14,9 +14,14 @@ message(STATUS "LLVM definitions ${LLVM_DEFS_LIST}")
 message(STATUS "LLVM libraries ${LLVM_LIBNAMES_LIST}")
 message(STATUS "LLVM lib dirs ${LLVM_LIBRARY_DIRS}")
 
-file(GLOB_RECURSE SOURCES src/*.cpp)
-add_executable(block2bin ${SOURCES})
-target_include_directories(block2bin PRIVATE include ${LLVM_INCLUDE_DIRS})
+file(GLOB_RECURSE SRCS src/*.cpp)
+file(GLOB_RECURSE MDLS modules/*.cppm)
+
+add_executable(block2bin)
+
+target_sources(block2bin PRIVATE ${SRCS} PRIVATE FILE_SET CXX_MODULES FILES ${MDLS})
+
+target_include_directories(block2bin PRIVATE ${LLVM_INCLUDE_DIRS})
 target_compile_definitions(block2bin PRIVATE ${LLVM_DEFS_LIST})
 target_link_directories(block2bin PRIVATE ${LLVM_LIBRARY_DIRS})
-target_link_libraries(block2bin PRIVATE ${LLVM_LIBNAMES_LIST} zip z)
+target_link_libraries(block2bin PRIVATE ${LLVM_LIBNAMES_LIST} zip z toolkit::core toolkit::json)

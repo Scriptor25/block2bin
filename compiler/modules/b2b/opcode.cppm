@@ -1,9 +1,13 @@
-#pragma once
+module;
+
+#include <json/json.hxx>
 
 #include <string>
 #include <vector>
 
-namespace b2b
+export module b2b.opcode;
+
+export namespace b2b
 {
     enum OpcodeE
     {
@@ -384,8 +388,25 @@ namespace b2b
     std::string GetFieldName(OpcodeE opcode, unsigned index);
 
     std::ostream &operator<<(std::ostream &stream, OpcodeE opcode);
+}
 
-    void from_json(const nlohmann::json &json, OpcodeE &reference);
-    void from_json(const nlohmann::json &json, OpcodeT &reference);
-    void from_json(const nlohmann::json &json, OpcodeFieldT &reference);
+export namespace data
+{
+    template<>
+    struct serializer<json::node, b2b::OpcodeE>
+    {
+        static bool from_data(const json::node &json, b2b::OpcodeE &reference);
+    };
+
+    template<>
+    struct serializer<json::node, b2b::OpcodeT>
+    {
+        static bool from_data(const json::node &json, b2b::OpcodeT &reference);
+    };
+
+    template<>
+    struct serializer<json::node, b2b::OpcodeFieldT>
+    {
+        static bool from_data(const json::node &json, b2b::OpcodeFieldT &reference);
+    };
 }

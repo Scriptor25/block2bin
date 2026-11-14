@@ -1,6 +1,12 @@
-#include <b2b/common.hpp>
-#include <b2b/project.hpp>
-#include <b2b/tree.hpp>
+module;
+
+#include <json/json.hxx>
+
+#include <memory>
+
+module b2b.project;
+
+import b2b.common;
 
 b2b::ExpressionNodePtr b2b::NumberT::GenerateExpression() const
 {
@@ -39,46 +45,46 @@ b2b::ExpressionNodePtr b2b::PrimitiveRefT::GenerateExpression(
 {
     switch (Type)
     {
-    case Number:
-    {
-        auto node = std::make_unique<ConstantFloatingPointNodeT>();
-        node->Value = std::stold(Value);
-        return std::move(node);
-    }
-    case PositiveNumber:
-    {
-        auto node = std::make_unique<ConstantFloatingPointNodeT>();
-        node->Value = std::stold(Value);
-        return std::move(node);
-    }
-    case PositiveInteger:
-    {
-        auto node = std::make_unique<ConstantIntegerNodeT>();
-        node->Value = std::stoull(Value);
-        return std::move(node);
-    }
-    case Integer:
-    {
-        auto node = std::make_unique<ConstantIntegerNodeT>();
-        node->Value = std::stoll(Value);
-        return std::move(node);
-    }
-    case Angle:
-    {
-        auto node = std::make_unique<ConstantFloatingPointNodeT>();
-        node->Value = std::stold(Value);
-        return std::move(node);
-    }
-    case Color:
-    {
-        throw std::runtime_error("TODO");
-    }
-    case String:
-    {
-        auto node = std::make_unique<ConstantStringNodeT>();
-        node->Value = Value;
-        return std::move(node);
-    }
+        case Number:
+        {
+            auto node = std::make_unique<ConstantFloatingPointNodeT>();
+            node->Value = std::stold(Value);
+            return std::move(node);
+        }
+        case PositiveNumber:
+        {
+            auto node = std::make_unique<ConstantFloatingPointNodeT>();
+            node->Value = std::stold(Value);
+            return std::move(node);
+        }
+        case PositiveInteger:
+        {
+            auto node = std::make_unique<ConstantIntegerNodeT>();
+            node->Value = std::stoull(Value);
+            return std::move(node);
+        }
+        case Integer:
+        {
+            auto node = std::make_unique<ConstantIntegerNodeT>();
+            node->Value = std::stoll(Value);
+            return std::move(node);
+        }
+        case Angle:
+        {
+            auto node = std::make_unique<ConstantFloatingPointNodeT>();
+            node->Value = std::stold(Value);
+            return std::move(node);
+        }
+        case Color:
+        {
+            throw std::runtime_error("TODO");
+        }
+        case String:
+        {
+            auto node = std::make_unique<ConstantStringNodeT>();
+            node->Value = Value;
+            return std::move(node);
+        }
     }
 
     throw std::runtime_error("undefined primitive type");
@@ -202,140 +208,140 @@ b2b::StatementNodePtr b2b::BlockT::GenerateStatement(const ProjectT &project, co
 {
     switch (Opcode)
     {
-    case control_repeat:
-    {
-        auto node = std::make_unique<ForEachStatementNodeT>();
+        case control_repeat:
+        {
+            auto node = std::make_unique<ForEachStatementNodeT>();
 
-        auto &input_times = Inputs.at("TIMES");
-        auto &input_substack = Inputs.at("SUBSTACK");
+            auto &input_times = Inputs.at("TIMES");
+            auto &input_substack = Inputs.at("SUBSTACK");
 
-        node->Times = input_times->Block->GenerateExpression(project, target);
+            node->Times = input_times->Block->GenerateExpression(project, target);
 
-        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
-        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
-        GenerateStatements(node->Statements, project, target, block);
+            const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+            const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+            GenerateStatements(node->Statements, project, target, block);
 
-        return std::move(node);
-    }
-    case control_forever:
-    {
-        auto node = std::make_unique<WhileStatementNodeT>();
+            return std::move(node);
+        }
+        case control_forever:
+        {
+            auto node = std::make_unique<WhileStatementNodeT>();
 
-        auto &input_substack = Inputs.at("SUBSTACK");
+            auto &input_substack = Inputs.at("SUBSTACK");
 
-        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
-        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
-        GenerateStatements(node->Statements, project, target, block);
+            const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+            const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+            GenerateStatements(node->Statements, project, target, block);
 
-        return std::move(node);
-    }
-    case control_if:
-    {
-        auto node = std::make_unique<IfElseStatementNodeT>();
-        node->HasElse = false;
+            return std::move(node);
+        }
+        case control_if:
+        {
+            auto node = std::make_unique<IfElseStatementNodeT>();
+            node->HasElse = false;
 
-        auto &input_condition = Inputs.at("CONDITION");
-        auto &input_substack = Inputs.at("SUBSTACK");
+            auto &input_condition = Inputs.at("CONDITION");
+            auto &input_substack = Inputs.at("SUBSTACK");
 
-        node->Condition = input_condition->Block->GenerateExpression(project, target);
+            node->Condition = input_condition->Block->GenerateExpression(project, target);
 
-        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
-        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
-        GenerateStatements(node->ThenStatements, project, target, block);
+            const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+            const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+            GenerateStatements(node->ThenStatements, project, target, block);
 
-        return std::move(node);
-    }
-    case control_if_else:
-    {
-        auto node = std::make_unique<IfElseStatementNodeT>();
-        node->HasElse = true;
+            return std::move(node);
+        }
+        case control_if_else:
+        {
+            auto node = std::make_unique<IfElseStatementNodeT>();
+            node->HasElse = true;
 
-        auto &input_condition = Inputs.at("CONDITION");
-        auto &input_substack = Inputs.at("SUBSTACK");
-        auto &input_substack2 = Inputs.at("SUBSTACK2");
+            auto &input_condition = Inputs.at("CONDITION");
+            auto &input_substack = Inputs.at("SUBSTACK");
+            auto &input_substack2 = Inputs.at("SUBSTACK2");
 
-        node->Condition = input_condition->Block->GenerateExpression(project, target);
+            node->Condition = input_condition->Block->GenerateExpression(project, target);
 
-        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
-        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
-        GenerateStatements(node->ThenStatements, project, target, block);
+            const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+            const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+            GenerateStatements(node->ThenStatements, project, target, block);
 
-        const auto &block2_id = *b2b::cast<IdRefT>(input_substack2->Block);
-        const auto &block2 = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
-        GenerateStatements(node->ElseStatements, project, target, block2);
+            const auto &block2_id = *b2b::cast<IdRefT>(input_substack2->Block);
+            const auto &block2 = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+            GenerateStatements(node->ElseStatements, project, target, block2);
 
-        return std::move(node);
-    }
-    case control_repeat_until:
-    {
-        auto node = std::make_unique<WhileStatementNodeT>();
+            return std::move(node);
+        }
+        case control_repeat_until:
+        {
+            auto node = std::make_unique<WhileStatementNodeT>();
 
-        auto &input_condition = Inputs.at("CONDITION");
-        auto &input_substack = Inputs.at("SUBSTACK");
+            auto &input_condition = Inputs.at("CONDITION");
+            auto &input_substack = Inputs.at("SUBSTACK");
 
-        auto condition = std::make_unique<NotExpressionNodeT>();
-        condition->Value = input_condition->Block->GenerateExpression(project, target);
-        node->Condition = std::move(condition);
+            auto condition = std::make_unique<NotExpressionNodeT>();
+            condition->Value = input_condition->Block->GenerateExpression(project, target);
+            node->Condition = std::move(condition);
 
-        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
-        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
-        GenerateStatements(node->Statements, project, target, block);
+            const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+            const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+            GenerateStatements(node->Statements, project, target, block);
 
-        return std::move(node);
-    }
-    case control_for_each:
-    {
-        // for ([variable] = 1; [variable] <= <value>; [variable]++) {
-        //   (substack)
-        // }
+            return std::move(node);
+        }
+        case control_for_each:
+        {
+            // for ([variable] = 1; [variable] <= <value>; [variable]++) {
+            //   (substack)
+            // }
 
-        auto node = std::make_unique<ForEachStatementNodeT>();
+            auto node = std::make_unique<ForEachStatementNodeT>();
 
-        auto &input_value = Inputs.at("VALUE");
-        auto &input_substack = Inputs.at("SUBSTACK");
+            auto &input_value = Inputs.at("VALUE");
+            auto &input_substack = Inputs.at("SUBSTACK");
 
-        auto &field_variable = Fields.at("VARIABLE");
+            auto &field_variable = Fields.at("VARIABLE");
 
-        node->Variable = field_variable.GenerateExpression(project, target);
+            node->Variable = field_variable.GenerateExpression(project, target);
 
-        node->Times = input_value->Block->GenerateExpression(project, target);
+            node->Times = input_value->Block->GenerateExpression(project, target);
 
-        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
-        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
-        GenerateStatements(node->Statements, project, target, block);
+            const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+            const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+            GenerateStatements(node->Statements, project, target, block);
 
-        return std::move(node);
-    }
-    case control_while:
-    {
-        auto node = std::make_unique<WhileStatementNodeT>();
+            return std::move(node);
+        }
+        case control_while:
+        {
+            auto node = std::make_unique<WhileStatementNodeT>();
 
-        auto &input_condition = Inputs.at("CONDITION");
-        auto &input_substack = Inputs.at("SUBSTACK");
+            auto &input_condition = Inputs.at("CONDITION");
+            auto &input_substack = Inputs.at("SUBSTACK");
 
-        node->Condition = input_condition->Block->GenerateExpression(project, target);
+            node->Condition = input_condition->Block->GenerateExpression(project, target);
 
-        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
-        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
-        GenerateStatements(node->Statements, project, target, block);
+            const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+            const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+            GenerateStatements(node->Statements, project, target, block);
 
-        return std::move(node);
-    }
-    case control_all_at_once:
-    {
-        auto node = std::make_unique<InstantStatementNodeT>();
+            return std::move(node);
+        }
+        case control_all_at_once:
+        {
+            auto node = std::make_unique<InstantStatementNodeT>();
 
-        auto &input_substack = Inputs.at("SUBSTACK");
+            auto &input_substack = Inputs.at("SUBSTACK");
 
-        const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
-        const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
-        GenerateStatements(node->Statements, project, target, block);
+            const auto &block_id = *b2b::cast<IdRefT>(input_substack->Block);
+            const auto &block = *b2b::cast<BlockT>(target->Blocks.at(block_id.Id));
+            GenerateStatements(node->Statements, project, target, block);
 
-        return std::move(node);
-    }
+            return std::move(node);
+        }
 
-    default:
-        break;
+        default:
+            break;
     }
 
     return GenerateExpression(project, target);
@@ -350,71 +356,71 @@ b2b::ParentNodePtr b2b::BlockT::GenerateParent(const ProjectT &project, const Ta
 
     switch (Opcode)
     {
-    case control_start_as_clone:
-    {
-        auto node = std::make_unique<ConstructorNodeT>();
-
-        if (Next)
+        case control_start_as_clone:
         {
-            const auto &next = *cast<BlockT>(target->Blocks.at(*Next));
-            GenerateStatements(node->Statements, project, target, next);
+            auto node = std::make_unique<ConstructorNodeT>();
+
+            if (Next)
+            {
+                const auto &next = *cast<BlockT>(target->Blocks.at(*Next));
+                GenerateStatements(node->Statements, project, target, next);
+            }
+
+            return std::move(node);
         }
-
-        return std::move(node);
-    }
-    case procedures_definition:
-    {
-        const auto id_ref = b2b::cast<IdRefT>(Inputs.at("custom_block")->Block);
-        const auto proc_block = b2b::cast<BlockT>(target->Blocks.at(id_ref->Id));
-        const auto prototype = b2b::cast<ProcedurePrototypeT>(*proc_block->Mutation);
-
-        auto node = std::make_unique<ProcedureNodeT>();
-        node->Name = prototype->ProcCode;
-
-        for (unsigned i = 0; i < prototype->ArgumentIds.size(); ++i)
+        case procedures_definition:
         {
-            node->Parameters.emplace_back(
-                prototype->ArgumentNames.at(i),
-                prototype->ArgumentDefaults.at(i));
-        }
+            const auto id_ref = b2b::cast<IdRefT>(Inputs.at("custom_block")->Block);
+            const auto proc_block = b2b::cast<BlockT>(target->Blocks.at(id_ref->Id));
+            const auto prototype = b2b::cast<ProcedurePrototypeT>(*proc_block->Mutation);
 
-        if (Next)
+            auto node = std::make_unique<ProcedureNodeT>();
+            node->Name = prototype->ProcCode;
+
+            for (unsigned i = 0; i < prototype->ArgumentIds.size(); ++i)
+            {
+                node->Parameters.emplace_back(
+                    prototype->ArgumentNames.at(i),
+                    prototype->ArgumentDefaults.at(i));
+            }
+
+            if (Next)
+            {
+                const auto &next = *cast<BlockT>(target->Blocks.at(*Next));
+                GenerateStatements(node->Statements, project, target, next);
+            }
+
+            return std::move(node);
+        }
+        default:
         {
-            const auto &next = *cast<BlockT>(target->Blocks.at(*Next));
-            GenerateStatements(node->Statements, project, target, next);
+            auto node = std::make_unique<ListenerNodeT>();
+            node->Event = GetName(Opcode);
+
+            const auto input_count = GetInputCount(Opcode);
+            for (unsigned i = 0; i < input_count; ++i)
+            {
+                const auto input_name = GetInputName(Opcode, i);
+                const auto &input = Inputs.at(input_name);
+                node->Inputs.emplace_back(input->Block->GenerateExpression(project, target));
+            }
+
+            const auto field_count = GetFieldCount(Opcode);
+            for (unsigned i = 0; i < field_count; ++i)
+            {
+                const auto field_name = GetFieldName(Opcode, i);
+                const auto &field = Fields.at(field_name);
+                node->Fields.emplace_back(field.GenerateExpression(project, target));
+            }
+
+            if (Next)
+            {
+                const auto &next = *cast<BlockT>(target->Blocks.at(*Next));
+                GenerateStatements(node->Statements, project, target, next);
+            }
+
+            return std::move(node);
         }
-
-        return std::move(node);
-    }
-    default:
-    {
-        auto node = std::make_unique<ListenerNodeT>();
-        node->Event = GetName(Opcode);
-
-        const auto input_count = GetInputCount(Opcode);
-        for (unsigned i = 0; i < input_count; ++i)
-        {
-            const auto input_name = GetInputName(Opcode, i);
-            const auto &input = Inputs.at(input_name);
-            node->Inputs.emplace_back(input->Block->GenerateExpression(project, target));
-        }
-
-        const auto field_count = GetFieldCount(Opcode);
-        for (unsigned i = 0; i < field_count; ++i)
-        {
-            const auto field_name = GetFieldName(Opcode, i);
-            const auto &field = Fields.at(field_name);
-            node->Fields.emplace_back(field.GenerateExpression(project, target));
-        }
-
-        if (Next)
-        {
-            const auto &next = *cast<BlockT>(target->Blocks.at(*Next));
-            GenerateStatements(node->Statements, project, target, next);
-        }
-
-        return std::move(node);
-    }
     }
 }
 
@@ -438,364 +444,640 @@ void b2b::GenerateStatements(
     }
 }
 
-void b2b::from_json(const nlohmann::json &json, ProjectT &reference)
+bool data::serializer<json::node, b2b::ProjectT>::from_data(
+    const json::node &json,
+    b2b::ProjectT &reference)
 {
-    reference.Targets = json["targets"];
-    reference.Monitors = json["monitors"];
-    reference.Extensions = json["extensions"];
-    reference.Meta = json["meta"];
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["targets"] >> reference.Targets;
+    ok &= json["monitors"] >> reference.Monitors;
+    ok &= json["extensions"] >> reference.Extensions;
+    ok &= json["meta"] >> reference.Meta;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, TargetPtr &reference)
+bool data::serializer<json::node, b2b::TargetPtr>::from_data(
+    const json::node &json,
+    b2b::TargetPtr &reference)
 {
-    if (!json["isStage"])
+    if (!json.is<json::object>())
+        return false;
+
+    bool is_stage;
+    if (!(json["isStage"] >> is_stage))
+        return false;
+
+    bool ok = true;
+
+    if (!is_stage)
     {
-        auto target = std::make_unique<SpriteT>();
-        *target = json;
+        auto target = std::make_unique<b2b::SpriteT>();
+        ok &= json >> *target;
         reference = std::move(target);
     }
     else
     {
-        auto target = std::make_unique<StageT>();
-        *target = json;
+        auto target = std::make_unique<b2b::StageT>();
+        ok &= json >> *target;
         reference = std::move(target);
     }
 
-    *reference = json;
+    ok &= json >> *reference;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, TargetT &reference)
+bool data::serializer<json::node, b2b::TargetT>::from_data(
+    const json::node &json,
+    b2b::TargetT &reference)
 {
-    reference.Name = json["name"];
-    reference.Variables = json["variables"];
-    reference.Lists = json["lists"];
-    reference.Broadcasts = json["broadcasts"];
-    reference.Blocks = json["blocks"];
-    reference.Comments = json["comments"];
-    reference.CurrentCostume = json["currentCostume"];
-    reference.Costumes = json["costumes"];
-    reference.Sounds = json["sounds"];
-    reference.LayerOrder = json["layerOrder"];
-    reference.Volume = json["volume"];
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["name"] >> reference.Name;
+    ok &= json["variables"] >> reference.Variables;
+    ok &= json["lists"] >> reference.Lists;
+    ok &= json["broadcasts"] >> reference.Broadcasts;
+    ok &= json["blocks"] >> reference.Blocks;
+    ok &= json["comments"] >> reference.Comments;
+    ok &= json["currentCostume"] >> reference.CurrentCostume;
+    ok &= json["costumes"] >> reference.Costumes;
+    ok &= json["sounds"] >> reference.Sounds;
+    ok &= json["layerOrder"] >> reference.LayerOrder;
+    ok &= json["volume"] >> reference.Volume;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, SpriteT &reference)
+bool data::serializer<json::node, b2b::SpriteT>::from_data(
+    const json::node &json,
+    b2b::SpriteT &reference)
 {
-    reference.Visible = json["visible"];
-    reference.X = json["x"];
-    reference.Y = json["y"];
-    reference.Size = json["size"];
-    reference.Direction = json["direction"];
-    reference.Draggable = json["draggable"];
-    reference.RotationStyle = json["rotationStyle"];
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["visible"] >> reference.Visible;
+    ok &= json["x"] >> reference.X;
+    ok &= json["y"] >> reference.Y;
+    ok &= json["size"] >> reference.Size;
+    ok &= json["direction"] >> reference.Direction;
+    ok &= json["draggable"] >> reference.Draggable;
+    ok &= json["rotationStyle"] >> reference.RotationStyle;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, StageT &reference)
+bool data::serializer<json::node, b2b::StageT>::from_data(
+    const json::node &json,
+    b2b::StageT &reference)
 {
-    reference.Tempo = option_from<double>(json, "tempo");
-    reference.VideoState = option_from<std::string>(json, "videoState");
-    reference.VideoTransparency = option_from<double>(json, "videoTransparency");
-    reference.TextToSpeechLanguage = option_from<std::string>(json, "textToSpeechLanguage");
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["tempo"] >> reference.Tempo;
+    ok &= json["videoState"] >> reference.VideoState;
+    ok &= json["videoTransparency"] >> reference.VideoTransparency;
+    ok &= json["textToSpeechLanguage"] >> reference.TextToSpeechLanguage;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, MonitorT &reference)
+bool data::serializer<json::node, b2b::MonitorT>::from_data(
+    const json::node &json,
+    b2b::MonitorT &reference)
 {
-    reference.Id = json["id"];
-    reference.Mode = json["mode"];
-    reference.Params = json["params"];
-    reference.SpriteName = option_from<std::string>(json, "spriteName");
-    reference.Value = json["value"];
-    reference.Width = json["width"];
-    reference.Height = json["height"];
-    reference.X = json["x"];
-    reference.Y = json["y"];
-    reference.Visible = json["visible"];
-    reference.SliderMin = option_from<double>(json, "sliderMin");
-    reference.SliderMax = option_from<double>(json, "sliderMax");
-    reference.IsDiscrete = option_from<bool>(json, "isDiscrete");
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["id"] >> reference.Id;
+    ok &= json["mode"] >> reference.Mode;
+    ok &= json["params"] >> reference.Params;
+    ok &= json["spriteName"] >> reference.SpriteName;
+    ok &= json["value"] >> reference.Value;
+    ok &= json["width"] >> reference.Width;
+    ok &= json["height"] >> reference.Height;
+    ok &= json["x"] >> reference.X;
+    ok &= json["y"] >> reference.Y;
+    ok &= json["visible"] >> reference.Visible;
+    ok &= json["sliderMin"] >> reference.SliderMin;
+    ok &= json["sliderMax"] >> reference.SliderMax;
+    ok &= json["isDiscrete"] >> reference.IsDiscrete;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, MetaT &reference)
+bool data::serializer<json::node, b2b::MetaT>::from_data(
+    const json::node &json,
+    b2b::MetaT &reference)
 {
-    reference.SemVer = json["semver"];
-    reference.VM = json["vm"];
-    reference.Agent = json["agent"];
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["semver"] >> reference.SemVer;
+    ok &= json["vm"] >> reference.VM;
+    ok &= json["agent"] >> reference.Agent;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, VariableT &reference)
+bool data::serializer<json::node, b2b::VariableT>::from_data(
+    const json::node &json,
+    b2b::VariableT &reference)
 {
-    reference.Name = json[0];
-    reference.Value = json[1];
-    reference.IsCloud = option_from<bool>(json, 2);
+    if (!json.is<json::array>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json[0] >> reference.Name;
+    ok &= json[1] >> reference.Value;
+    ok &= json[2] >> reference.IsCloud;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, ListT &reference)
+bool data::serializer<json::node, b2b::ListT>::from_data(
+    const json::node &json,
+    b2b::ListT &reference)
 {
-    reference.Name = json[0];
-    reference.Values = json[1];
+    if (!json.is<json::array>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json[0] >> reference.Name;
+    ok &= json[1] >> reference.Values;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, CommentT &reference)
+bool data::serializer<json::node, b2b::CommentT>::from_data(
+    const json::node &json,
+    b2b::CommentT &reference)
 {
-    reference.BlockId = json["blockId"];
-    reference.X = json["x"];
-    reference.Y = json["y"];
-    reference.Width = json["width"];
-    reference.Height = json["height"];
-    reference.Minimized = json["minimized"];
-    reference.Text = json["text"];
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["blockId"] >> reference.BlockId;
+    ok &= json["x"] >> reference.X;
+    ok &= json["y"] >> reference.Y;
+    ok &= json["width"] >> reference.Width;
+    ok &= json["height"] >> reference.Height;
+    ok &= json["minimized"] >> reference.Minimized;
+    ok &= json["text"] >> reference.Text;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, AssetPtr &reference)
+bool data::serializer<json::node, b2b::AssetPtr>::from_data(
+    const json::node &json,
+    b2b::AssetPtr &reference)
 {
-    if (json.contains("rotationCenterX") || json.contains("rotationCenterY"))
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    if (json["rotationCenterX"] || json["rotationCenterY"])
     {
-        auto asset = std::make_unique<CostumeT>();
-        *asset = json;
+        auto asset = std::make_unique<b2b::CostumeT>();
+        ok &= json >> *asset;
         reference = std::move(asset);
     }
     else
     {
-        auto asset = std::make_unique<SoundT>();
-        *asset = json;
+        auto asset = std::make_unique<b2b::SoundT>();
+        ok &= json >> *asset;
         reference = std::move(asset);
     }
 
-    *reference = json;
+    ok &= json >> *reference;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, AssetT &reference)
+bool data::serializer<json::node, b2b::AssetT>::from_data(
+    const json::node &json,
+    b2b::AssetT &reference)
 {
-    reference.AssetId = json["assetId"];
-    reference.Name = json["name"];
-    reference.MD5Ext = json["md5ext"];
-    reference.DataFormat = json["dataFormat"];
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["assetId"] >> reference.AssetId;
+    ok &= json["name"] >> reference.Name;
+    ok &= json["md5ext"] >> reference.MD5Ext;
+    ok &= json["dataFormat"] >> reference.DataFormat;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, CostumeT &reference)
+bool data::serializer<json::node, b2b::CostumeT>::from_data(
+    const json::node &json,
+    b2b::CostumeT &reference)
 {
-    reference.RotationCenterX = json["rotationCenterX"];
-    reference.RotationCenterY = json["rotationCenterY"];
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["rotationCenterX"] >> reference.RotationCenterX;
+    ok &= json["rotationCenterY"] >> reference.RotationCenterY;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, SoundT &reference)
+bool data::serializer<json::node, b2b::SoundT>::from_data(
+    const json::node &json,
+    b2b::SoundT &reference)
 {
-    reference.Rate = json["rate"];
-    reference.SampleCount = json["sampleCount"];
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["rate"] >> reference.Rate;
+    ok &= json["sampleCount"] >> reference.SampleCount;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, MutationPtr &reference)
+bool data::serializer<json::node, b2b::MutationPtr>::from_data(
+    const json::node &json,
+    b2b::MutationPtr &reference)
 {
-    if (json.contains("hasnext"))
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    if (json["hasnext"])
     {
-        auto mutation = std::make_unique<ControlStopT>();
-        *mutation = json;
+        auto mutation = std::make_unique<b2b::ControlStopT>();
+        ok &= json >> *mutation;
         reference = std::move(mutation);
     }
-    else if (json.contains("argumentnames") || json.contains("argumentdefaults"))
+    else if (json["argumentnames"] || json["argumentdefaults"])
     {
-        auto mutation = std::make_unique<ProcedurePrototypeT>();
-        *mutation = json;
+        auto mutation = std::make_unique<b2b::ProcedurePrototypeT>();
+        ok &= json >> *mutation;
         reference = std::move(mutation);
     }
     else
     {
-        auto mutation = std::make_unique<ProcedureCallT>();
-        *mutation = json;
+        auto mutation = std::make_unique<b2b::ProcedureCallT>();
+        ok &= json >> *mutation;
         reference = std::move(mutation);
     }
 
-    *reference = json;
+    ok &= json >> *reference;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, MutationT &reference)
+bool data::serializer<json::node, b2b::MutationT>::from_data(
+    const json::node &json,
+    b2b::MutationT &reference)
 {
-    reference.TagName = json["tagName"];
-    reference.Children = json["children"];
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["tagName"] >> reference.TagName;
+    ok &= json["children"] >> reference.Children;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, ProcedureCallT &reference)
+bool data::serializer<json::node, b2b::ProcedureCallT>::from_data(
+    const json::node &json,
+    b2b::ProcedureCallT &reference)
 {
-    reference.ProcCode = json["proccode"];
-    reference.ArgumentIds = nlohmann::json::parse(json["argumentids"].get<std::string>());
-    reference.Warp = nlohmann::json::parse(json["warp"].get<std::string>());
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["proccode"] >> reference.ProcCode;
+    // TODO: ok &= json::parse(json["argumentids"].get<std::string>()) >> reference.ArgumentIds;
+    // TODO: ok &= json::parse(json["warp"].get<std::string>()) >> reference.Warp;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, ProcedurePrototypeT &reference)
+bool data::serializer<json::node, b2b::ProcedurePrototypeT>::from_data(
+    const json::node &json,
+    b2b::ProcedurePrototypeT &reference)
 {
-    reference.ProcCode = json["proccode"];
-    reference.ArgumentIds = nlohmann::json::parse(json["argumentids"].get<std::string>());
-    reference.ArgumentNames = nlohmann::json::parse(json["argumentnames"].get<std::string>());
-    reference.ArgumentDefaults = nlohmann::json::parse(json["argumentdefaults"].get<std::string>());
-    reference.Warp = nlohmann::json::parse(json["warp"].get<std::string>());
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["proccode"] >> reference.ProcCode;
+    // TODO: ok &= json::parse(json["argumentids"].get<std::string>()) >> reference.ArgumentIds;
+    // TODO: ok &= json::parse(json["argumentnames"].get<std::string>()) >> reference.ArgumentNames;
+    // TODO: ok &= json::parse(json["argumentdefaults"].get<std::string>()) >> reference.ArgumentDefaults;
+    // TODO: ok &= json::parse(json["warp"].get<std::string>()) >> reference.Warp;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, ControlStopT &reference)
+bool data::serializer<json::node, b2b::ControlStopT>::from_data(
+    const json::node &json,
+    b2b::ControlStopT &reference)
 {
-    if (auto node = json["hasnext"]; node.is_string())
+    if (!json.is<json::object>())
+        return false;
+
+    auto &hasnext_node = json["hasnext"];
+
+    if (std::string str; hasnext_node >> str)
     {
-        reference.HasNext = node.get<std::string>() == "true";
+        reference.HasNext = str == "true";
+        return true;
     }
-    else
-    {
-        reference.HasNext = node.get<bool>();
-    }
+
+    return hasnext_node >> reference.HasNext;
 }
 
-void b2b::from_json(const nlohmann::json &json, InputPtr &reference)
+bool data::serializer<json::node, b2b::InputPtr>::from_data(
+    const json::node &json,
+    b2b::InputPtr &reference)
 {
-    if (json[0] != 3)
+    if (!json.is<json::array>())
+        return false;
+
+    if (unsigned type; json[0] >> type)
     {
-        auto input = std::make_unique<InputT>();
-        *input = json;
+        if (type != 3)
+        {
+            auto input = std::make_unique<b2b::InputT>();
+            const auto ok = json >> *input;
+            reference = std::move(input);
+            return ok;
+        }
+
+        auto input = std::make_unique<b2b::ObscuredInputT>();
+        const auto ok = json >> *input;
         reference = std::move(input);
+        return ok;
     }
+
+    return false;
+}
+
+bool data::serializer<json::node, b2b::InputT>::from_data(
+    const json::node &json,
+    b2b::InputT &reference)
+{
+    if (!json.is<json::array>())
+        return false;
+
+    if (unsigned type; json[0] >> type)
+        reference.IsShadow = type != 2;
     else
+        return false;
+
+    return json[1] >> reference.Block;
+}
+
+bool data::serializer<json::node, b2b::ObscuredInputT>::from_data(
+    const json::node &json,
+    b2b::ObscuredInputT &reference)
+{
+    if (!json.is<json::array>())
+        return false;
+
+    if (unsigned type; json[0] >> type)
+        reference.IsShadow = type != 2;
+    else
+        return false;
+
+    bool ok = true;
+
+    ok &= json[1] >> reference.Block;
+    ok &= json[2] >> reference.Shadow;
+
+    return ok;
+}
+
+bool data::serializer<json::node, b2b::BlockRefPtr>::from_data(
+    const json::node &json,
+    b2b::BlockRefPtr &reference)
+{
+    if (json.is<json::string>())
     {
-        auto input = std::make_unique<ObscuredInputT>();
-        *input = json;
-        reference = std::move(input);
-    }
-}
-
-void b2b::from_json(const nlohmann::json &json, InputT &reference)
-{
-    reference.IsShadow = json[0] != 2;
-    reference.Block = json[1];
-}
-
-void b2b::from_json(const nlohmann::json &json, ObscuredInputT &reference)
-{
-    reference.IsShadow = json[0] != 2;
-    reference.Block = json[1];
-    reference.Shadow = json[2];
-}
-
-void b2b::from_json(const nlohmann::json &json, BlockRefPtr &reference)
-{
-    if (json.is_string())
-    {
-        auto ref = std::make_unique<IdRefT>();
-        *ref = json;
+        auto ref = std::make_unique<b2b::IdRefT>();
+        const auto ok = json >> *ref;
         reference = std::move(ref);
-        return;
+        return ok;
     }
 
-    if (json.is_array())
+    if (json.is<json::array>())
     {
-        switch (static_cast<unsigned>(json[0]))
+        unsigned type;
+        if (!(json[0] >> type))
+            return false;
+
+        switch (type)
         {
-        case 11:
-        {
-            auto ref = std::make_unique<BroadcastRefT>();
-            *ref = json;
-            reference = std::move(ref);
-            break;
+            case 11:
+            {
+                auto ref = std::make_unique<b2b::BroadcastRefT>();
+                const auto ok = json >> *ref;
+                reference = std::move(ref);
+                return ok;
+            }
+            case 12:
+            case 13:
+            {
+                auto ref = std::make_unique<b2b::VariableRefT>();
+                const auto ok = json >> *ref;
+                reference = std::move(ref);
+                return ok;
+            }
+            default:
+            {
+                auto ref = std::make_unique<b2b::PrimitiveRefT>();
+                const auto ok = json >> *ref;
+                reference = std::move(ref);
+                return ok;
+            }
         }
-        case 12:
-        case 13:
-        {
-            auto ref = std::make_unique<VariableRefT>();
-            *ref = json;
-            reference = std::move(ref);
-            break;
-        }
-        default:
-        {
-            auto ref = std::make_unique<PrimitiveRefT>();
-            *ref = json;
-            reference = std::move(ref);
-            break;
-        }
-        }
-        return;
     }
 
-    auto ref = std::make_unique<BlockT>();
-    *ref = json;
+    auto ref = std::make_unique<b2b::BlockT>();
+    const auto ok = json >> *ref;
     reference = std::move(ref);
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, IdRefT &reference)
+bool data::serializer<json::node, b2b::IdRefT>::from_data(
+    const json::node &json,
+    b2b::IdRefT &reference)
 {
-    reference.Id = json;
+    return json >> reference.Id;
 }
 
-void b2b::from_json(const nlohmann::json &json, PrimitiveRefT &reference)
+bool data::serializer<json::node, b2b::PrimitiveRefT>::from_data(
+    const json::node &json,
+    b2b::PrimitiveRefT &reference)
 {
-    reference.Type = static_cast<PrimitiveRefE>(static_cast<unsigned>(json[0]));
-    reference.Value = json[1];
+    if (!json.is<json::array>())
+        return false;
+
+    if (unsigned type; json[0] >> type)
+        reference.Type = static_cast<b2b::PrimitiveRefE>(type);
+    else
+        return false;
+
+    return json[1] >> reference.Value;
 }
 
-void b2b::from_json(const nlohmann::json &json, BroadcastRefT &reference)
+bool data::serializer<json::node, b2b::BroadcastRefT>::from_data(
+    const json::node &json,
+    b2b::BroadcastRefT &reference)
 {
-    reference.Name = json[1];
-    reference.Id = json[2];
+    if (!json.is<json::array>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json[1] >> reference.Name;
+    ok &= json[2] >> reference.Id;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, VariableRefT &reference)
+bool data::serializer<json::node, b2b::VariableRefT>::from_data(
+    const json::node &json,
+    b2b::VariableRefT &reference)
 {
-    reference.IsList = json[0] == 13;
-    reference.Name = json[1];
-    reference.Id = json[2];
-    reference.X = option_from<double>(json, 3);
-    reference.Y = option_from<double>(json, 4);
+    if (!json.is<json::array>())
+        return false;
+
+    if (unsigned type; json[0] >> type)
+        reference.IsList = type == 13;
+    else
+        return false;
+
+    bool ok = true;
+
+    ok &= json[1] >> reference.Name;
+    ok &= json[2] >> reference.Id;
+    ok &= json[3] >> reference.X;
+    ok &= json[4] >> reference.Y;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, BlockT &reference)
+bool data::serializer<json::node, b2b::BlockT>::from_data(
+    const json::node &json,
+    b2b::BlockT &reference)
 {
-    reference.Opcode = json["opcode"];
-    reference.Next = option_from<std::string>(json, "next");
-    reference.Parent = option_from<std::string>(json, "parent");
-    reference.Inputs = json["inputs"];
-    reference.Fields = json["fields"];
-    reference.Shadow = json["shadow"];
-    reference.TopLevel = json["topLevel"];
-    reference.X = option_from<double>(json, "x");
-    reference.Y = option_from<double>(json, "y");
-    reference.Comment = option_from<std::string>(json, "comment");
-    reference.Mutation = option_from<MutationPtr>(json, "mutation");
+    if (!json.is<json::object>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json["opcode"] >> reference.Opcode;
+    ok &= json["next"] >> reference.Next;
+    ok &= json["parent"] >> reference.Parent;
+    ok &= json["inputs"] >> reference.Inputs;
+    ok &= json["fields"] >> reference.Fields;
+    ok &= json["shadow"] >> reference.Shadow;
+    ok &= json["topLevel"] >> reference.TopLevel;
+    ok &= json["x"] >> reference.X;
+    ok &= json["y"] >> reference.Y;
+    ok &= json["comment"] >> reference.Comment;
+    ok &= json["mutation"] >> reference.Mutation;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, FieldT &reference)
+bool data::serializer<json::node, b2b::FieldT>::from_data(
+    const json::node &json,
+    b2b::FieldT &reference)
 {
-    reference.Value = json[0];
-    reference.Id = option_from<std::string>(json, 1);
+    if (!json.is<json::array>())
+        return false;
+
+    bool ok = true;
+
+    ok &= json[0] >> reference.Value;
+    ok &= json[1] >> reference.Id;
+
+    return ok;
 }
 
-void b2b::from_json(const nlohmann::json &json, ValuePtr &reference)
+bool data::serializer<json::node, b2b::ValuePtr>::from_data(
+    const json::node &json,
+    b2b::ValuePtr &reference)
 {
-    if (json.is_number())
+    if (json.is<json::integer>() || json.is<json::floating_point>())
     {
-        auto value = std::make_unique<NumberT>();
-        *value = json;
+        auto value = std::make_unique<b2b::NumberT>();
+        const auto ok = json >> *value;
         reference = std::move(value);
+        return ok;
     }
-    else if (json.is_string())
+
+    if (json.is<json::string>())
     {
-        auto value = std::make_unique<StringT>();
-        *value = json;
+        auto value = std::make_unique<b2b::StringT>();
+        const auto ok = json >> *value;
         reference = std::move(value);
+        return ok;
     }
-    else if (json.is_array())
+
+    if (json.is<json::array>())
     {
-        auto value = std::make_unique<ArrayT>();
-        *value = json;
+        auto value = std::make_unique<b2b::ArrayT>();
+        const auto ok = json >> *value;
         reference = std::move(value);
+        return ok;
     }
+
+    return false;
 }
 
-void b2b::from_json(const nlohmann::json &json, NumberT &reference)
+bool data::serializer<json::node, b2b::NumberT>::from_data(
+    const json::node &json,
+    b2b::NumberT &reference)
 {
-    reference.Value = json;
+    return json >> reference.Value;
 }
 
-void b2b::from_json(const nlohmann::json &json, StringT &reference)
+bool data::serializer<json::node, b2b::StringT>::from_data(
+    const json::node &json,
+    b2b::StringT &reference)
 {
-    reference.Value = json;
+    return json >> reference.Value;
 }
 
-void b2b::from_json(const nlohmann::json &json, ArrayT &reference)
+bool data::serializer<json::node, b2b::ArrayT>::from_data(
+    const json::node &json,
+    b2b::ArrayT &reference)
 {
-    reference.Values = json;
+    return json >> reference.Values;
 }
