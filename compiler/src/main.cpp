@@ -24,15 +24,11 @@ int main()
 
     const b2b::Zip zip("example2.sb3");
     if (!zip)
-    {
         return 1;
-    }
 
     std::ifstream blocks("blocks.json");
     if (!blocks)
-    {
         return 1;
-    }
 
     b2b::ReadDictionary(blocks);
 
