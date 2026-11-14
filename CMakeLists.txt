@@ -21,6 +21,7 @@ option(BUILD_DOC "" OFF)
 
 option(BUILD_SHARED_LIBS "" OFF)
 
+add_subdirectory(deps/toolkit)
 add_subdirectory(deps/libzip)
 add_subdirectory(compiler)
 add_subdirectory(engine)

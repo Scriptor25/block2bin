@@ -1,9 +1,10 @@
 #pragma once
 
-#include <string>
-#include <vector>
 #include <b2b/opcode.hpp>
 #include <b2b/tree_fwd.hpp>
+
+#include <string>
+#include <vector>
 
 namespace b2b
 {

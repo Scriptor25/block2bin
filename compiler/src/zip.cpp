@@ -1,5 +1,6 @@
-#include <iostream>
 #include <b2b/zip.hpp>
+
+#include <iostream>
 
 b2b::Zip::File::File(zip_file_t *file)
     : m_File(file)

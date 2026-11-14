@@ -1,6 +1,7 @@
+#include <b2b/opcode.hpp>
+
 #include <map>
 #include <ranges>
-#include <b2b/opcode.hpp>
 
 b2b::OpcodeE b2b::ToOpcode(const std::string &string)
 {

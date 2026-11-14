@@ -1,13 +1,15 @@
-#include <fstream>
-#include <iostream>
-#include <vector>
 #include <b2b/common.hpp>
 #include <b2b/project.hpp>
 #include <b2b/tree.hpp>
 #include <b2b/zip.hpp>
 #include <b2b/ir/builder.hpp>
+
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
+
+#include <fstream>
+#include <iostream>
+#include <vector>
 
 int main()
 {

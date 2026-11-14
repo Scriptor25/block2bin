@@ -1,6 +1,7 @@
 #pragma once
 
 #include <b2b/tree_fwd.hpp>
+
 #include <llvm/IR/IRBuilder.h>
 
 namespace b2b::ir
