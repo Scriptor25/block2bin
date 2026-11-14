@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <nlohmann/json.hpp>
 
 namespace b2b
 {

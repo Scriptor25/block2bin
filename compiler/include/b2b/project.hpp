@@ -1,15 +1,13 @@
 #pragma once
 
-// #define JSON_ASSERT(x)
-
-#include <map>
-#include <string>
-#include <vector>
 #include <b2b/opcode.hpp>
 #include <b2b/option.hpp>
 #include <b2b/project_fwd.hpp>
 #include <b2b/tree_fwd.hpp>
-#include <nlohmann/json.hpp>
+
+#include <map>
+#include <string>
+#include <vector>
 
 namespace b2b
 {
