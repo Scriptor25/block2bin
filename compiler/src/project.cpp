@@ -445,31 +445,31 @@ void b2b::GenerateStatements(
 }
 
 bool data::serializer<json::node, b2b::ProjectT>::from_data(
-    const json::node &json,
-    b2b::ProjectT &reference)
+    const json::node &node,
+    b2b::ProjectT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["targets"] >> reference.Targets;
-    ok &= json["monitors"] >> reference.Monitors;
-    ok &= json["extensions"] >> reference.Extensions;
-    ok &= json["meta"] >> reference.Meta;
+    ok &= node["targets"] >> value.Targets;
+    ok &= node["monitors"] >> value.Monitors;
+    ok &= node["extensions"] >> value.Extensions;
+    ok &= node["meta"] >> value.Meta;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::TargetPtr>::from_data(
-    const json::node &json,
-    b2b::TargetPtr &reference)
+    const json::node &node,
+    b2b::TargetPtr &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool is_stage;
-    if (!(json["isStage"] >> is_stage))
+    if (!(node["isStage"] >> is_stage))
         return false;
 
     bool ok = true;
@@ -477,307 +477,307 @@ bool data::serializer<json::node, b2b::TargetPtr>::from_data(
     if (!is_stage)
     {
         auto target = std::make_unique<b2b::SpriteT>();
-        ok &= json >> *target;
-        reference = std::move(target);
+        ok &= node >> *target;
+        value = std::move(target);
     }
     else
     {
         auto target = std::make_unique<b2b::StageT>();
-        ok &= json >> *target;
-        reference = std::move(target);
+        ok &= node >> *target;
+        value = std::move(target);
     }
 
-    ok &= json >> *reference;
+    ok &= node >> *value;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::TargetT>::from_data(
-    const json::node &json,
-    b2b::TargetT &reference)
+    const json::node &node,
+    b2b::TargetT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["name"] >> reference.Name;
-    ok &= json["variables"] >> reference.Variables;
-    ok &= json["lists"] >> reference.Lists;
-    ok &= json["broadcasts"] >> reference.Broadcasts;
-    ok &= json["blocks"] >> reference.Blocks;
-    ok &= json["comments"] >> reference.Comments;
-    ok &= json["currentCostume"] >> reference.CurrentCostume;
-    ok &= json["costumes"] >> reference.Costumes;
-    ok &= json["sounds"] >> reference.Sounds;
-    ok &= json["layerOrder"] >> reference.LayerOrder;
-    ok &= json["volume"] >> reference.Volume;
+    ok &= node["name"] >> value.Name;
+    ok &= node["variables"] >> value.Variables;
+    ok &= node["lists"] >> value.Lists;
+    ok &= node["broadcasts"] >> value.Broadcasts;
+    ok &= node["blocks"] >> value.Blocks;
+    ok &= node["comments"] >> value.Comments;
+    ok &= node["currentCostume"] >> value.CurrentCostume;
+    ok &= node["costumes"] >> value.Costumes;
+    ok &= node["sounds"] >> value.Sounds;
+    ok &= node["layerOrder"] >> value.LayerOrder;
+    ok &= node["volume"] >> value.Volume;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::SpriteT>::from_data(
-    const json::node &json,
-    b2b::SpriteT &reference)
+    const json::node &node,
+    b2b::SpriteT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["visible"] >> reference.Visible;
-    ok &= json["x"] >> reference.X;
-    ok &= json["y"] >> reference.Y;
-    ok &= json["size"] >> reference.Size;
-    ok &= json["direction"] >> reference.Direction;
-    ok &= json["draggable"] >> reference.Draggable;
-    ok &= json["rotationStyle"] >> reference.RotationStyle;
+    ok &= node["visible"] >> value.Visible;
+    ok &= node["x"] >> value.X;
+    ok &= node["y"] >> value.Y;
+    ok &= node["size"] >> value.Size;
+    ok &= node["direction"] >> value.Direction;
+    ok &= node["draggable"] >> value.Draggable;
+    ok &= node["rotationStyle"] >> value.RotationStyle;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::StageT>::from_data(
-    const json::node &json,
-    b2b::StageT &reference)
+    const json::node &node,
+    b2b::StageT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["tempo"] >> reference.Tempo;
-    ok &= json["videoState"] >> reference.VideoState;
-    ok &= json["videoTransparency"] >> reference.VideoTransparency;
-    ok &= json["textToSpeechLanguage"] >> reference.TextToSpeechLanguage;
+    ok &= node["tempo"] >> value.Tempo;
+    ok &= node["videoState"] >> value.VideoState;
+    ok &= node["videoTransparency"] >> value.VideoTransparency;
+    ok &= node["textToSpeechLanguage"] >> value.TextToSpeechLanguage;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::MonitorT>::from_data(
-    const json::node &json,
-    b2b::MonitorT &reference)
+    const json::node &node,
+    b2b::MonitorT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["id"] >> reference.Id;
-    ok &= json["mode"] >> reference.Mode;
-    ok &= json["params"] >> reference.Params;
-    ok &= json["spriteName"] >> reference.SpriteName;
-    ok &= json["value"] >> reference.Value;
-    ok &= json["width"] >> reference.Width;
-    ok &= json["height"] >> reference.Height;
-    ok &= json["x"] >> reference.X;
-    ok &= json["y"] >> reference.Y;
-    ok &= json["visible"] >> reference.Visible;
-    ok &= json["sliderMin"] >> reference.SliderMin;
-    ok &= json["sliderMax"] >> reference.SliderMax;
-    ok &= json["isDiscrete"] >> reference.IsDiscrete;
+    ok &= node["id"] >> value.Id;
+    ok &= node["mode"] >> value.Mode;
+    ok &= node["params"] >> value.Params;
+    ok &= node["spriteName"] >> value.SpriteName;
+    ok &= node["value"] >> value.Value;
+    ok &= node["width"] >> value.Width;
+    ok &= node["height"] >> value.Height;
+    ok &= node["x"] >> value.X;
+    ok &= node["y"] >> value.Y;
+    ok &= node["visible"] >> value.Visible;
+    ok &= node["sliderMin"] >> value.SliderMin;
+    ok &= node["sliderMax"] >> value.SliderMax;
+    ok &= node["isDiscrete"] >> value.IsDiscrete;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::MetaT>::from_data(
-    const json::node &json,
-    b2b::MetaT &reference)
+    const json::node &node,
+    b2b::MetaT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["semver"] >> reference.SemVer;
-    ok &= json["vm"] >> reference.VM;
-    ok &= json["agent"] >> reference.Agent;
+    ok &= node["semver"] >> value.SemVer;
+    ok &= node["vm"] >> value.VM;
+    ok &= node["agent"] >> value.Agent;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::VariableT>::from_data(
-    const json::node &json,
-    b2b::VariableT &reference)
+    const json::node &node,
+    b2b::VariableT &value)
 {
-    if (!json.is<json::array>())
+    if (!node.is<json::array>())
         return false;
 
     bool ok = true;
 
-    ok &= json[0] >> reference.Name;
-    ok &= json[1] >> reference.Value;
-    ok &= json[2] >> reference.IsCloud;
+    ok &= node[0] >> value.Name;
+    ok &= node[1] >> value.Value;
+    ok &= node[2] >> value.IsCloud;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::ListT>::from_data(
-    const json::node &json,
-    b2b::ListT &reference)
+    const json::node &node,
+    b2b::ListT &value)
 {
-    if (!json.is<json::array>())
+    if (!node.is<json::array>())
         return false;
 
     bool ok = true;
 
-    ok &= json[0] >> reference.Name;
-    ok &= json[1] >> reference.Values;
+    ok &= node[0] >> value.Name;
+    ok &= node[1] >> value.Values;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::CommentT>::from_data(
-    const json::node &json,
-    b2b::CommentT &reference)
+    const json::node &node,
+    b2b::CommentT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["blockId"] >> reference.BlockId;
-    ok &= json["x"] >> reference.X;
-    ok &= json["y"] >> reference.Y;
-    ok &= json["width"] >> reference.Width;
-    ok &= json["height"] >> reference.Height;
-    ok &= json["minimized"] >> reference.Minimized;
-    ok &= json["text"] >> reference.Text;
+    ok &= node["blockId"] >> value.BlockId;
+    ok &= node["x"] >> value.X;
+    ok &= node["y"] >> value.Y;
+    ok &= node["width"] >> value.Width;
+    ok &= node["height"] >> value.Height;
+    ok &= node["minimized"] >> value.Minimized;
+    ok &= node["text"] >> value.Text;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::AssetPtr>::from_data(
-    const json::node &json,
-    b2b::AssetPtr &reference)
+    const json::node &node,
+    b2b::AssetPtr &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    if (json["rotationCenterX"] || json["rotationCenterY"])
+    if (node["rotationCenterX"] || node["rotationCenterY"])
     {
         auto asset = std::make_unique<b2b::CostumeT>();
-        ok &= json >> *asset;
-        reference = std::move(asset);
+        ok &= node >> *asset;
+        value = std::move(asset);
     }
     else
     {
         auto asset = std::make_unique<b2b::SoundT>();
-        ok &= json >> *asset;
-        reference = std::move(asset);
+        ok &= node >> *asset;
+        value = std::move(asset);
     }
 
-    ok &= json >> *reference;
+    ok &= node >> *value;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::AssetT>::from_data(
-    const json::node &json,
-    b2b::AssetT &reference)
+    const json::node &node,
+    b2b::AssetT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["assetId"] >> reference.AssetId;
-    ok &= json["name"] >> reference.Name;
-    ok &= json["md5ext"] >> reference.MD5Ext;
-    ok &= json["dataFormat"] >> reference.DataFormat;
+    ok &= node["assetId"] >> value.AssetId;
+    ok &= node["name"] >> value.Name;
+    ok &= node["md5ext"] >> value.MD5Ext;
+    ok &= node["dataFormat"] >> value.DataFormat;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::CostumeT>::from_data(
-    const json::node &json,
-    b2b::CostumeT &reference)
+    const json::node &node,
+    b2b::CostumeT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["rotationCenterX"] >> reference.RotationCenterX;
-    ok &= json["rotationCenterY"] >> reference.RotationCenterY;
+    ok &= node["rotationCenterX"] >> value.RotationCenterX;
+    ok &= node["rotationCenterY"] >> value.RotationCenterY;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::SoundT>::from_data(
-    const json::node &json,
-    b2b::SoundT &reference)
+    const json::node &node,
+    b2b::SoundT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["rate"] >> reference.Rate;
-    ok &= json["sampleCount"] >> reference.SampleCount;
+    ok &= node["rate"] >> value.Rate;
+    ok &= node["sampleCount"] >> value.SampleCount;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::MutationPtr>::from_data(
-    const json::node &json,
-    b2b::MutationPtr &reference)
+    const json::node &node,
+    b2b::MutationPtr &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    if (json["hasnext"])
+    if (node["hasnext"])
     {
         auto mutation = std::make_unique<b2b::ControlStopT>();
-        ok &= json >> *mutation;
-        reference = std::move(mutation);
+        ok &= node >> *mutation;
+        value = std::move(mutation);
     }
-    else if (json["argumentnames"] || json["argumentdefaults"])
+    else if (node["argumentnames"] || node["argumentdefaults"])
     {
         auto mutation = std::make_unique<b2b::ProcedurePrototypeT>();
-        ok &= json >> *mutation;
-        reference = std::move(mutation);
+        ok &= node >> *mutation;
+        value = std::move(mutation);
     }
     else
     {
         auto mutation = std::make_unique<b2b::ProcedureCallT>();
-        ok &= json >> *mutation;
-        reference = std::move(mutation);
+        ok &= node >> *mutation;
+        value = std::move(mutation);
     }
 
-    ok &= json >> *reference;
+    ok &= node >> *value;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::MutationT>::from_data(
-    const json::node &json,
-    b2b::MutationT &reference)
+    const json::node &node,
+    b2b::MutationT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["tagName"] >> reference.TagName;
-    ok &= json["children"] >> reference.Children;
+    ok &= node["tagName"] >> value.TagName;
+    ok &= node["children"] >> value.Children;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::ProcedureCallT>::from_data(
-    const json::node &json,
-    b2b::ProcedureCallT &reference)
+    const json::node &node,
+    b2b::ProcedureCallT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["proccode"] >> reference.ProcCode;
+    ok &= node["proccode"] >> value.ProcCode;
     // TODO: ok &= json::parse(json["argumentids"].get<std::string>()) >> reference.ArgumentIds;
     // TODO: ok &= json::parse(json["warp"].get<std::string>()) >> reference.Warp;
 
@@ -785,15 +785,15 @@ bool data::serializer<json::node, b2b::ProcedureCallT>::from_data(
 }
 
 bool data::serializer<json::node, b2b::ProcedurePrototypeT>::from_data(
-    const json::node &json,
-    b2b::ProcedurePrototypeT &reference)
+    const json::node &node,
+    b2b::ProcedurePrototypeT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["proccode"] >> reference.ProcCode;
+    ok &= node["proccode"] >> value.ProcCode;
     // TODO: ok &= json::parse(json["argumentids"].get<std::string>()) >> reference.ArgumentIds;
     // TODO: ok &= json::parse(json["argumentnames"].get<std::string>()) >> reference.ArgumentNames;
     // TODO: ok &= json::parse(json["argumentdefaults"].get<std::string>()) >> reference.ArgumentDefaults;
@@ -803,43 +803,43 @@ bool data::serializer<json::node, b2b::ProcedurePrototypeT>::from_data(
 }
 
 bool data::serializer<json::node, b2b::ControlStopT>::from_data(
-    const json::node &json,
-    b2b::ControlStopT &reference)
+    const json::node &node,
+    b2b::ControlStopT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
-    auto &hasnext_node = json["hasnext"];
+    auto &hasnext_node = node["hasnext"];
 
     if (std::string str; hasnext_node >> str)
     {
-        reference.HasNext = str == "true";
+        value.HasNext = str == "true";
         return true;
     }
 
-    return hasnext_node >> reference.HasNext;
+    return hasnext_node >> value.HasNext;
 }
 
 bool data::serializer<json::node, b2b::InputPtr>::from_data(
-    const json::node &json,
-    b2b::InputPtr &reference)
+    const json::node &node,
+    b2b::InputPtr &value)
 {
-    if (!json.is<json::array>())
+    if (!node.is<json::array>())
         return false;
 
-    if (unsigned type; json[0] >> type)
+    if (unsigned type; node[0] >> type)
     {
         if (type != 3)
         {
             auto input = std::make_unique<b2b::InputT>();
-            const auto ok = json >> *input;
-            reference = std::move(input);
+            const auto ok = node >> *input;
+            value = std::move(input);
             return ok;
         }
 
         auto input = std::make_unique<b2b::ObscuredInputT>();
-        const auto ok = json >> *input;
-        reference = std::move(input);
+        const auto ok = node >> *input;
+        value = std::move(input);
         return ok;
     }
 
@@ -847,56 +847,56 @@ bool data::serializer<json::node, b2b::InputPtr>::from_data(
 }
 
 bool data::serializer<json::node, b2b::InputT>::from_data(
-    const json::node &json,
-    b2b::InputT &reference)
+    const json::node &node,
+    b2b::InputT &value)
 {
-    if (!json.is<json::array>())
+    if (!node.is<json::array>())
         return false;
 
-    if (unsigned type; json[0] >> type)
-        reference.IsShadow = type != 2;
+    if (unsigned type; node[0] >> type)
+        value.IsShadow = type != 2;
     else
         return false;
 
-    return json[1] >> reference.Block;
+    return node[1] >> value.Block;
 }
 
 bool data::serializer<json::node, b2b::ObscuredInputT>::from_data(
-    const json::node &json,
-    b2b::ObscuredInputT &reference)
+    const json::node &node,
+    b2b::ObscuredInputT &value)
 {
-    if (!json.is<json::array>())
+    if (!node.is<json::array>())
         return false;
 
-    if (unsigned type; json[0] >> type)
-        reference.IsShadow = type != 2;
+    if (unsigned type; node[0] >> type)
+        value.IsShadow = type != 2;
     else
         return false;
 
     bool ok = true;
 
-    ok &= json[1] >> reference.Block;
-    ok &= json[2] >> reference.Shadow;
+    ok &= node[1] >> value.Block;
+    ok &= node[2] >> value.Shadow;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::BlockRefPtr>::from_data(
-    const json::node &json,
-    b2b::BlockRefPtr &reference)
+    const json::node &node,
+    b2b::BlockRefPtr &value)
 {
-    if (json.is<json::string>())
+    if (node.is<json::string>())
     {
         auto ref = std::make_unique<b2b::IdRefT>();
-        const auto ok = json >> *ref;
-        reference = std::move(ref);
+        const auto ok = node >> *ref;
+        value = std::move(ref);
         return ok;
     }
 
-    if (json.is<json::array>())
+    if (node.is<json::array>())
     {
         unsigned type;
-        if (!(json[0] >> type))
+        if (!(node[0] >> type))
             return false;
 
         switch (type)
@@ -904,157 +904,157 @@ bool data::serializer<json::node, b2b::BlockRefPtr>::from_data(
             case 11:
             {
                 auto ref = std::make_unique<b2b::BroadcastRefT>();
-                const auto ok = json >> *ref;
-                reference = std::move(ref);
+                const auto ok = node >> *ref;
+                value = std::move(ref);
                 return ok;
             }
             case 12:
             case 13:
             {
                 auto ref = std::make_unique<b2b::VariableRefT>();
-                const auto ok = json >> *ref;
-                reference = std::move(ref);
+                const auto ok = node >> *ref;
+                value = std::move(ref);
                 return ok;
             }
             default:
             {
                 auto ref = std::make_unique<b2b::PrimitiveRefT>();
-                const auto ok = json >> *ref;
-                reference = std::move(ref);
+                const auto ok = node >> *ref;
+                value = std::move(ref);
                 return ok;
             }
         }
     }
 
     auto ref = std::make_unique<b2b::BlockT>();
-    const auto ok = json >> *ref;
-    reference = std::move(ref);
+    const auto ok = node >> *ref;
+    value = std::move(ref);
     return ok;
 }
 
 bool data::serializer<json::node, b2b::IdRefT>::from_data(
-    const json::node &json,
-    b2b::IdRefT &reference)
+    const json::node &node,
+    b2b::IdRefT &value)
 {
-    return json >> reference.Id;
+    return node >> value.Id;
 }
 
 bool data::serializer<json::node, b2b::PrimitiveRefT>::from_data(
-    const json::node &json,
-    b2b::PrimitiveRefT &reference)
+    const json::node &node,
+    b2b::PrimitiveRefT &value)
 {
-    if (!json.is<json::array>())
+    if (!node.is<json::array>())
         return false;
 
-    if (unsigned type; json[0] >> type)
-        reference.Type = static_cast<b2b::PrimitiveRefE>(type);
+    if (unsigned type; node[0] >> type)
+        value.Type = static_cast<b2b::PrimitiveRefE>(type);
     else
         return false;
 
-    return json[1] >> reference.Value;
+    return node[1] >> value.Value;
 }
 
 bool data::serializer<json::node, b2b::BroadcastRefT>::from_data(
-    const json::node &json,
-    b2b::BroadcastRefT &reference)
+    const json::node &node,
+    b2b::BroadcastRefT &value)
 {
-    if (!json.is<json::array>())
+    if (!node.is<json::array>())
         return false;
 
     bool ok = true;
 
-    ok &= json[1] >> reference.Name;
-    ok &= json[2] >> reference.Id;
+    ok &= node[1] >> value.Name;
+    ok &= node[2] >> value.Id;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::VariableRefT>::from_data(
-    const json::node &json,
-    b2b::VariableRefT &reference)
+    const json::node &node,
+    b2b::VariableRefT &value)
 {
-    if (!json.is<json::array>())
+    if (!node.is<json::array>())
         return false;
 
-    if (unsigned type; json[0] >> type)
-        reference.IsList = type == 13;
+    if (unsigned type; node[0] >> type)
+        value.IsList = type == 13;
     else
         return false;
 
     bool ok = true;
 
-    ok &= json[1] >> reference.Name;
-    ok &= json[2] >> reference.Id;
-    ok &= json[3] >> reference.X;
-    ok &= json[4] >> reference.Y;
+    ok &= node[1] >> value.Name;
+    ok &= node[2] >> value.Id;
+    ok &= node[3] >> value.X;
+    ok &= node[4] >> value.Y;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::BlockT>::from_data(
-    const json::node &json,
-    b2b::BlockT &reference)
+    const json::node &node,
+    b2b::BlockT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["opcode"] >> reference.Opcode;
-    ok &= json["next"] >> reference.Next;
-    ok &= json["parent"] >> reference.Parent;
-    ok &= json["inputs"] >> reference.Inputs;
-    ok &= json["fields"] >> reference.Fields;
-    ok &= json["shadow"] >> reference.Shadow;
-    ok &= json["topLevel"] >> reference.TopLevel;
-    ok &= json["x"] >> reference.X;
-    ok &= json["y"] >> reference.Y;
-    ok &= json["comment"] >> reference.Comment;
-    ok &= json["mutation"] >> reference.Mutation;
+    ok &= node["opcode"] >> value.Opcode;
+    ok &= node["next"] >> value.Next;
+    ok &= node["parent"] >> value.Parent;
+    ok &= node["inputs"] >> value.Inputs;
+    ok &= node["fields"] >> value.Fields;
+    ok &= node["shadow"] >> value.Shadow;
+    ok &= node["topLevel"] >> value.TopLevel;
+    ok &= node["x"] >> value.X;
+    ok &= node["y"] >> value.Y;
+    ok &= node["comment"] >> value.Comment;
+    ok &= node["mutation"] >> value.Mutation;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::FieldT>::from_data(
-    const json::node &json,
-    b2b::FieldT &reference)
+    const json::node &node,
+    b2b::FieldT &value)
 {
-    if (!json.is<json::array>())
+    if (!node.is<json::array>())
         return false;
 
     bool ok = true;
 
-    ok &= json[0] >> reference.Value;
-    ok &= json[1] >> reference.Id;
+    ok &= node[0] >> value.Value;
+    ok &= node[1] >> value.Id;
 
     return ok;
 }
 
 bool data::serializer<json::node, b2b::ValuePtr>::from_data(
-    const json::node &json,
-    b2b::ValuePtr &reference)
+    const json::node &node,
+    b2b::ValuePtr &value)
 {
-    if (json.is<json::integer>() || json.is<json::floating_point>())
+    if (node.is<json::integer>() || node.is<json::floating_point>())
     {
-        auto value = std::make_unique<b2b::NumberT>();
-        const auto ok = json >> *value;
-        reference = std::move(value);
+        auto val = std::make_unique<b2b::NumberT>();
+        const auto ok = node >> *val;
+        value = std::move(val);
         return ok;
     }
 
-    if (json.is<json::string>())
+    if (node.is<json::string>())
     {
-        auto value = std::make_unique<b2b::StringT>();
-        const auto ok = json >> *value;
-        reference = std::move(value);
+        auto val = std::make_unique<b2b::StringT>();
+        const auto ok = node >> *val;
+        value = std::move(val);
         return ok;
     }
 
-    if (json.is<json::array>())
+    if (node.is<json::array>())
     {
-        auto value = std::make_unique<b2b::ArrayT>();
-        const auto ok = json >> *value;
-        reference = std::move(value);
+        auto val = std::make_unique<b2b::ArrayT>();
+        const auto ok = node >> *val;
+        value = std::move(val);
         return ok;
     }
 
@@ -1062,22 +1062,22 @@ bool data::serializer<json::node, b2b::ValuePtr>::from_data(
 }
 
 bool data::serializer<json::node, b2b::NumberT>::from_data(
-    const json::node &json,
-    b2b::NumberT &reference)
+    const json::node &node,
+    b2b::NumberT &value)
 {
-    return json >> reference.Value;
+    return node >> value.Value;
 }
 
 bool data::serializer<json::node, b2b::StringT>::from_data(
-    const json::node &json,
-    b2b::StringT &reference)
+    const json::node &node,
+    b2b::StringT &value)
 {
-    return json >> reference.Value;
+    return node >> value.Value;
 }
 
 bool data::serializer<json::node, b2b::ArrayT>::from_data(
-    const json::node &json,
-    b2b::ArrayT &reference)
+    const json::node &node,
+    b2b::ArrayT &value)
 {
-    return json >> reference.Values;
+    return node >> value.Values;
 }

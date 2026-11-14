@@ -395,18 +395,18 @@ export namespace data
     template<>
     struct serializer<json::node, b2b::OpcodeE>
     {
-        static bool from_data(const json::node &json, b2b::OpcodeE &reference);
+        static bool from_data(const json::node &node, b2b::OpcodeE &value);
     };
 
     template<>
     struct serializer<json::node, b2b::OpcodeT>
     {
-        static bool from_data(const json::node &json, b2b::OpcodeT &reference);
+        static bool from_data(const json::node &node, b2b::OpcodeT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::OpcodeFieldT>
     {
-        static bool from_data(const json::node &json, b2b::OpcodeFieldT &reference);
+        static bool from_data(const json::node &node, b2b::OpcodeFieldT &value);
     };
 }

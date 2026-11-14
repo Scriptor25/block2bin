@@ -393,198 +393,198 @@ export namespace data
     template<>
     struct serializer<json::node, b2b::ProjectT>
     {
-        static bool from_data(const json::node &json, b2b::ProjectT &reference);
+        static bool from_data(const json::node &node, b2b::ProjectT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::TargetPtr>
     {
-        static bool from_data(const json::node &json, b2b::TargetPtr &reference);
+        static bool from_data(const json::node &node, b2b::TargetPtr &value);
     };
 
     template<>
     struct serializer<json::node, b2b::TargetT>
     {
-        static bool from_data(const json::node &json, b2b::TargetT &reference);
+        static bool from_data(const json::node &node, b2b::TargetT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::SpriteT>
     {
-        static bool from_data(const json::node &json, b2b::SpriteT &reference);
+        static bool from_data(const json::node &node, b2b::SpriteT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::StageT>
     {
-        static bool from_data(const json::node &json, b2b::StageT &reference);
+        static bool from_data(const json::node &node, b2b::StageT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::MonitorT>
     {
-        static bool from_data(const json::node &json, b2b::MonitorT &reference);
+        static bool from_data(const json::node &node, b2b::MonitorT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::MetaT>
     {
-        static bool from_data(const json::node &json, b2b::MetaT &reference);
+        static bool from_data(const json::node &node, b2b::MetaT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::VariableT>
     {
-        static bool from_data(const json::node &json, b2b::VariableT &reference);
+        static bool from_data(const json::node &node, b2b::VariableT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::ListT>
     {
-        static bool from_data(const json::node &json, b2b::ListT &reference);
+        static bool from_data(const json::node &node, b2b::ListT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::CommentT>
     {
-        static bool from_data(const json::node &json, b2b::CommentT &reference);
+        static bool from_data(const json::node &node, b2b::CommentT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::AssetPtr>
     {
-        static bool from_data(const json::node &json, b2b::AssetPtr &reference);
+        static bool from_data(const json::node &node, b2b::AssetPtr &value);
     };
 
     template<>
     struct serializer<json::node, b2b::AssetT>
     {
-        static bool from_data(const json::node &json, b2b::AssetT &reference);
+        static bool from_data(const json::node &node, b2b::AssetT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::CostumeT>
     {
-        static bool from_data(const json::node &json, b2b::CostumeT &reference);
+        static bool from_data(const json::node &node, b2b::CostumeT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::SoundT>
     {
-        static bool from_data(const json::node &json, b2b::SoundT &reference);
+        static bool from_data(const json::node &node, b2b::SoundT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::MutationPtr>
     {
-        static bool from_data(const json::node &json, b2b::MutationPtr &reference);
+        static bool from_data(const json::node &node, b2b::MutationPtr &value);
     };
 
     template<>
     struct serializer<json::node, b2b::MutationT>
     {
-        static bool from_data(const json::node &json, b2b::MutationT &reference);
+        static bool from_data(const json::node &node, b2b::MutationT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::ProcedureCallT>
     {
-        static bool from_data(const json::node &json, b2b::ProcedureCallT &reference);
+        static bool from_data(const json::node &node, b2b::ProcedureCallT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::ProcedurePrototypeT>
     {
-        static bool from_data(const json::node &json, b2b::ProcedurePrototypeT &reference);
+        static bool from_data(const json::node &node, b2b::ProcedurePrototypeT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::ControlStopT>
     {
-        static bool from_data(const json::node &json, b2b::ControlStopT &reference);
+        static bool from_data(const json::node &node, b2b::ControlStopT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::InputPtr>
     {
-        static bool from_data(const json::node &json, b2b::InputPtr &reference);
+        static bool from_data(const json::node &node, b2b::InputPtr &value);
     };
 
     template<>
     struct serializer<json::node, b2b::InputT>
     {
-        static bool from_data(const json::node &json, b2b::InputT &reference);
+        static bool from_data(const json::node &node, b2b::InputT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::ObscuredInputT>
     {
-        static bool from_data(const json::node &json, b2b::ObscuredInputT &reference);
+        static bool from_data(const json::node &node, b2b::ObscuredInputT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::BlockRefPtr>
     {
-        static bool from_data(const json::node &json, b2b::BlockRefPtr &reference);
+        static bool from_data(const json::node &node, b2b::BlockRefPtr &value);
     };
 
     template<>
     struct serializer<json::node, b2b::IdRefT>
     {
-        static bool from_data(const json::node &json, b2b::IdRefT &reference);
+        static bool from_data(const json::node &node, b2b::IdRefT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::PrimitiveRefT>
     {
-        static bool from_data(const json::node &json, b2b::PrimitiveRefT &reference);
+        static bool from_data(const json::node &node, b2b::PrimitiveRefT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::BroadcastRefT>
     {
-        static bool from_data(const json::node &json, b2b::BroadcastRefT &reference);
+        static bool from_data(const json::node &node, b2b::BroadcastRefT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::VariableRefT>
     {
-        static bool from_data(const json::node &json, b2b::VariableRefT &reference);
+        static bool from_data(const json::node &node, b2b::VariableRefT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::BlockT>
     {
-        static bool from_data(const json::node &json, b2b::BlockT &reference);
+        static bool from_data(const json::node &node, b2b::BlockT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::FieldT>
     {
-        static bool from_data(const json::node &json, b2b::FieldT &reference);
+        static bool from_data(const json::node &node, b2b::FieldT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::ValuePtr>
     {
-        static bool from_data(const json::node &json, b2b::ValuePtr &reference);
+        static bool from_data(const json::node &node, b2b::ValuePtr &value);
     };
 
     template<>
     struct serializer<json::node, b2b::NumberT>
     {
-        static bool from_data(const json::node &json, b2b::NumberT &reference);
+        static bool from_data(const json::node &node, b2b::NumberT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::StringT>
     {
-        static bool from_data(const json::node &json, b2b::StringT &reference);
+        static bool from_data(const json::node &node, b2b::StringT &value);
     };
 
     template<>
     struct serializer<json::node, b2b::ArrayT>
     {
-        static bool from_data(const json::node &json, b2b::ArrayT &reference);
+        static bool from_data(const json::node &node, b2b::ArrayT &value);
     };
 }

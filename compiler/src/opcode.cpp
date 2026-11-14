@@ -365,10 +365,10 @@ static std::map<b2b::OpcodeE, b2b::OpcodeT> dictionary;
 
 void b2b::ReadDictionary(std::istream &stream)
 {
-    json::node json;
-    stream >> json;
+    json::node node;
+    stream >> node;
 
-    if (std::map<std::string, OpcodeT> map; json >> map)
+    if (std::map<std::string, OpcodeT> map; node >> map)
         for (auto &[key, value] : map)
         {
             dictionary.emplace(ToOpcode(key), std::move(value));
@@ -412,37 +412,43 @@ std::ostream &b2b::operator<<(std::ostream &stream, const OpcodeE opcode)
     return stream << dictionary.at(opcode).Name;
 }
 
-bool data::serializer<json::node, b2b::OpcodeE>::from_data(const json::node &json, b2b::OpcodeE &reference)
+bool data::serializer<json::node, b2b::OpcodeE>::from_data(
+    const json::node &node,
+    b2b::OpcodeE &value)
 {
-    if (std::string str; json >> str)
+    if (std::string str; node >> str)
     {
-        reference = b2b::ToOpcode(str);
+        value = b2b::ToOpcode(str);
         return true;
     }
 
     return false;
 }
 
-bool data::serializer<json::node, b2b::OpcodeT>::from_data(const json::node &json, b2b::OpcodeT &reference)
+bool data::serializer<json::node, b2b::OpcodeT>::from_data(
+    const json::node &node,
+    b2b::OpcodeT &value)
 {
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
     bool ok = true;
 
-    ok &= json["entry"] >> reference.IsEntry;
-    ok &= json["name"] >> reference.Name;
-    ok &= json["inputs"] >> reference.Inputs;
-    ok &= json["fields"] >> reference.Fields;
+    ok &= node["entry"] >> value.IsEntry;
+    ok &= node["name"] >> value.Name;
+    ok &= node["inputs"] >> value.Inputs;
+    ok &= node["fields"] >> value.Fields;
 
     return ok;
 }
 
-bool data::serializer<json::node, b2b::OpcodeFieldT>::from_data(const json::node &json, b2b::OpcodeFieldT &reference)
+bool data::serializer<json::node, b2b::OpcodeFieldT>::from_data(
+    const json::node &node,
+    b2b::OpcodeFieldT &value)
 {
-    if (std::string str; json >> str)
+    if (std::string str; node >> str)
     {
-        reference = {
+        value = {
             .IsEnum = false,
             .Name   = std::move(str),
             .Values = {},
@@ -450,15 +456,15 @@ bool data::serializer<json::node, b2b::OpcodeFieldT>::from_data(const json::node
         return true;
     }
 
-    if (!json.is<json::object>())
+    if (!node.is<json::object>())
         return false;
 
-    reference.IsEnum = true;
+    value.IsEnum = true;
 
     bool ok = true;
 
-    ok &= json["name"] >> reference.Name;
-    ok &= json["values"] >> reference.Values;
+    ok &= node["name"] >> value.Name;
+    ok &= node["values"] >> value.Values;
 
     return ok;
 }
